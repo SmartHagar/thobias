@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hagar.satgar.my.id/sitemap.xml
