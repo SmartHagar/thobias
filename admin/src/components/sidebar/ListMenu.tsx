@@ -33,12 +33,12 @@ const setAdminMenus = async () => {
       icon: <BsHouseDoor />,
       subMenus: [
         {
-          name: "Jenis",
-          href: createUrl("/categories/all"),
+          name: "Daftar",
+          href: createUrl("/categories/lists"),
         },
         {
-          name: "Daftar",
-          href: createUrl("/categories/sub"),
+          name: "Sub Kategori",
+          href: createUrl("/categories/subCategories"),
         },
       ],
     },
