@@ -1,6 +1,5 @@
 /** @format */
 "use client";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import PaginationDefault from "@/components/pagination/PaginationDefault";
 import TablesDefault from "@/components/tables/TablesDefault";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,7 +7,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
-import { BsCake } from "react-icons/bs";
+import { BsProjector } from "react-icons/bs";
 
 type DeleteProps = {
   id?: number | string;
@@ -61,17 +60,30 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
   }, [search, sortby, order, page, limit]);
 
   // table
-  const headTable = ["No", "Jenis", "Nama", "Aksi"];
-  const tableBodies = ["category.category_nm", "product_nm"];
+  const headTable = [
+    "No",
+    "Kategori",
+    "Sub Kategori",
+    "Nama",
+    "Deskripsi",
+    "Aksi",
+  ];
+  const tableBodies = [
+    "sub_category.category.category_nm",
+    "sub_category.sub_category_nm",
+    "product_nm",
+    "product_desc",
+  ];
 
   const gotTo = (href: string) => router.push(href);
 
   const costume = (row: ProductsTypes) => {
     return (
       <div className="flex space-x-4 mx-2">
-        <BsCake
+        <BsProjector
+          title="Variasi"
           className="cursor-pointer hover:text-primary"
-          onClick={() => gotTo(`/admin/foods/${row.id}/variants`)}
+          onClick={() => gotTo(`/admin/products/variants?product_id=${row.id}`)}
         />
       </div>
     );
@@ -79,7 +91,7 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
   return (
     <div className="flex-1 flex-col max-w-full h-full overflow-auto">
       {isLoading ? (
-        <LoadingSpiner />
+        <span className="loading loading-spinner loading-lg"></span>
       ) : (
         <>
           <div className="">

@@ -6,7 +6,6 @@ import ShowData from "./ShowData";
 import ModalDelete from "@/components/modal/ModalDelete";
 import { Toaster } from "react-hot-toast";
 import toastShow from "@/utils/toast-show";
-import BtnDefault from "@/components/button/BtnDefault";
 import { useWelcomeContext } from "@/context/WelcomeContext";
 import Searching from "./Searching";
 import { useForm } from "react-hook-form";
@@ -22,7 +21,7 @@ type Delete = {
 // products
 const Products = () => {
   // context
-  const halaman = "Makanan";
+  const halaman = "Produk";
   const { setWelcome } = useWelcomeContext();
 
   useEffect(() => {
@@ -77,8 +76,10 @@ const Products = () => {
           setDelete={setDelete}
         />
         <div className="mb-4 flex justify-between">
-          <p>Silahkan Mengolah data Products</p>
-          <BtnDefault onClick={handleTambah}>Tambah Data</BtnDefault>
+          <p>Silahkan Mengolah data Produk</p>
+          <button className="btn btn-primary" onClick={handleTambah}>
+            Tambah Data
+          </button>
         </div>
       </div>
 

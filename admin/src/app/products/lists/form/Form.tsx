@@ -6,9 +6,7 @@ import toastShow from "@/utils/toast-show";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import BodyForm from "./BodyForm";
-import BtnDefault from "@/components/button/BtnDefault";
 import submitData from "@/services/submitData";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
 
@@ -90,11 +88,15 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
         </div>
         <div>
           {isLoading ? (
-            <LoadingSpiner />
+            <span className="loading loading-spinner text-primary"></span>
           ) : (
-            <BtnDefault onClick={handleSubmit(onSubmit)} type="submit">
+            <button
+              className="btn btn-primary"
+              onClick={handleSubmit(onSubmit)}
+              type="submit"
+            >
               Simpan
-            </BtnDefault>
+            </button>
           )}
         </div>
       </form>

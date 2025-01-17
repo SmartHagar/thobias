@@ -43,6 +43,11 @@ const setAdminMenus = async () => {
       ],
     },
     {
+      name: "Produk",
+      href: createUrl("/products/lists"),
+      icon: <BsBook />,
+    },
+    {
       name: "Pesanan",
       href: createUrl("/orders"),
       icon: <BsBook />,

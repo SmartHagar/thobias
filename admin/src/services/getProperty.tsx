@@ -83,7 +83,7 @@ const getProperty = (obj: any, prop: any, index: number, setIndexBox: any) => {
       return showRupiah(obj);
     }
     // cek content
-    const ContentProps = ["content"];
+    const ContentProps = ["product_desc"];
     // fungsi untuk membatasi jumlah karakter
     const limitContentLength = (content: string, maxLength: number) => {
       if (content.length > maxLength) {
