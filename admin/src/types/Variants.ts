@@ -9,11 +9,10 @@ import ReviewsTypes from "./Reviews";
 export default interface VariantsTypes {
   id: string;
   product_id: string;
-  attribute_nm: string;
-  variant_nm: string;
+  color: string;
+  size: string;
   price: number;
   stock: number;
-  description: string;
   product: ProductsTypes;
   product_variant_images: ProductImagesTypes[];
   review: ReviewsTypes[];

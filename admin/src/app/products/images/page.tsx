@@ -6,7 +6,6 @@ import ShowData from "./ShowData";
 import ModalDelete from "@/components/modal/ModalDelete";
 import { Toaster } from "react-hot-toast";
 import toastShow from "@/utils/toast-show";
-import BtnDefault from "@/components/button/BtnDefault";
 import { useWelcomeContext } from "@/context/WelcomeContext";
 import Searching from "./Searching";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import ProductImagesTypes from "@/types/ProductImages";
 import Form from "./form/Form";
 import useVariants from "@/stores/crud/Variants";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // type setDelete
 type Delete = {
@@ -22,10 +22,11 @@ type Delete = {
   isDelete: boolean;
 };
 // productImages
-const ProductImages = ({ params }: { params: { productId: string } }) => {
-  const { productId } = params;
+const ProductImages = () => {
+  const searchParams = useSearchParams();
+  const productId = searchParams?.get("variant_id") || "";
   // context
-  const halaman = "Gambar Makanan";
+  const halaman = "Gambar Produk";
   const { setWelcome } = useWelcomeContext();
   // store
   const { removeData } = useProductImages();
@@ -41,10 +42,21 @@ const ProductImages = ({ params }: { params: { productId: string } }) => {
     setShowVariants(productId);
   }, [productId, setShowVariants]);
 
+  console.log({ showVariants });
+
   useEffect(() => {
-    setWelcome(`Halaman ${halaman} - ${showVariants?.product.product_nm}`);
+    setWelcome(
+      `Halaman ${halaman} - ${showVariants?.product.product_nm} ${
+        showVariants?.color || ""
+      } ${showVariants?.size || ""}`
+    );
     return () => {};
-  }, [setWelcome, showVariants?.product.product_nm]);
+  }, [
+    setWelcome,
+    showVariants?.color,
+    showVariants?.product.product_nm,
+    showVariants?.size,
+  ]);
 
   const handleTambah = () => {
     setShowModal(true);
@@ -94,7 +106,9 @@ const ProductImages = ({ params }: { params: { productId: string } }) => {
         </Link>
         <div className="mb-4 flex justify-between">
           <p>Silahkan Mengolah data ProductImages</p>
-          <BtnDefault onClick={handleTambah}>Tambah Data</BtnDefault>
+          <button className="btn btn-primary" onClick={handleTambah}>
+            Tambah Data
+          </button>
         </div>
       </div>
 

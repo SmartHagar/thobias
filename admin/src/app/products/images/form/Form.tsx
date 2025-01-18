@@ -6,9 +6,7 @@ import toastShow from "@/utils/toast-show";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import BodyForm from "./BodyForm";
-import BtnDefault from "@/components/button/BtnDefault";
 import submitData from "@/services/submitData";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import useProductImages from "@/stores/crud/ProductImages";
 import ProductImagesTypes from "@/types/ProductImages";
 
@@ -44,7 +42,7 @@ const Form = ({
   // reset form
   const resetForm = () => {
     setValue("id", "");
-    setValue("position", 2);
+    setValue("is_main", false);
     setValue("product_img", "");
   };
 
@@ -52,7 +50,7 @@ const Form = ({
   useEffect(() => {
     if (dtEdit) {
       setValue("id", dtEdit.id);
-      setValue("position", dtEdit.position);
+      setValue("is_main", dtEdit.is_main);
     } else {
       resetForm();
     }
@@ -61,6 +59,7 @@ const Form = ({
   // simpan data
   const onSubmit: SubmitHandler<ProductImagesTypes> = async (row) => {
     row.product_variant_id = product_variant_id;
+    row.is_main = row.is_main ? 1 : 0;
     //  submit data
     // console.log({ row });
     // return;
@@ -98,11 +97,15 @@ const Form = ({
         </div>
         <div>
           {isLoading ? (
-            <LoadingSpiner />
+            <span className="loading loading-spinner loading-lg"></span>
           ) : (
-            <BtnDefault onClick={handleSubmit(onSubmit)} type="submit">
+            <button
+              className="btn btn-primary"
+              onClick={handleSubmit(onSubmit)}
+              type="submit"
+            >
               Simpan
-            </BtnDefault>
+            </button>
           )}
         </div>
       </form>

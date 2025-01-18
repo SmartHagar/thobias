@@ -46,6 +46,7 @@ type Props = {
   sorter?: string;
   order?: "asc" | "desc";
   setIndexBox?: (data: number) => void;
+  onClickTR?: (row: any) => void;
 };
 
 const TablesDefault = (props: Props) => {
@@ -98,6 +99,8 @@ const TablesDefault = (props: Props) => {
     }
   }, [props.sorter]);
 
+  const { onClickTR } = props;
+
   return (
     <table className="w-full border-collapse text-left bg-white/50 text-black">
       <thead className="bg-linear">
@@ -142,7 +145,11 @@ const TablesDefault = (props: Props) => {
             const { id } = row;
             const dtIndex = index;
             return (
-              <tr key={index}>
+              <tr
+                key={index}
+                onClick={() => onClickTR && onClickTR(row)}
+                className={`${onClickTR && "cursor-pointer"}`}
+              >
                 <td className="px-6 py-4 rounded-l-xl">{showNo(index)}</td>
                 {/* loop td */}
                 {props.tableBodies.map((column, index) => {
@@ -159,7 +166,12 @@ const TablesDefault = (props: Props) => {
                     {props.costume && props.costume(row)}
                     {props.ubah && (
                       <BsFillPencilFill
-                        onClick={() => props.setEdit && props?.setEdit(row)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          if (props.setEdit) {
+                            props.setEdit(row); // Jalankan logika edit
+                          }
+                        }}
                         size={20}
                         className="cursor-pointer hover:text-yellow-500"
                         title="Ubah"
@@ -167,10 +179,12 @@ const TablesDefault = (props: Props) => {
                     )}
                     {props.hapus && (
                       <BsFillTrashFill
-                        onClick={() =>
-                          props?.setDelete &&
-                          props?.setDelete({ id, isDelete: false })
-                        }
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          if (props.setDelete) {
+                            props.setDelete({ id, isDelete: false });
+                          }
+                        }}
                         size={20}
                         className="cursor-pointer hover:text-red-700"
                         title="Hapus"

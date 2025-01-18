@@ -7,7 +7,6 @@ import { FC, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
-import { BsProjector } from "react-icons/bs";
 
 type DeleteProps = {
   id?: number | string;
@@ -77,17 +76,10 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
 
   const gotTo = (href: string) => router.push(href);
 
-  const costume = (row: ProductsTypes) => {
-    return (
-      <div className="flex space-x-4 mx-2">
-        <BsProjector
-          title="Variasi"
-          className="cursor-pointer hover:text-primary"
-          onClick={() => gotTo(`/admin/products/variants?product_id=${row.id}`)}
-        />
-      </div>
-    );
+  const onClickTR = (row: ProductsTypes) => {
+    gotTo(`/products/variants?product_id=${row.id}`);
   };
+
   return (
     <div className="flex-1 flex-col max-w-full h-full overflow-auto">
       {isLoading ? (
@@ -105,7 +97,7 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
               setDelete={setDelete}
               ubah={true}
               hapus={true}
-              costume={costume}
+              onClickTR={onClickTR}
             />
           </div>
           {dtProducts?.last_page > 1 && (

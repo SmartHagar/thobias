@@ -16,6 +16,7 @@ import ModalNewsletter from "@/components/Modal/ModalNewsletter";
 import TopNavThree from "@/components/Header/TopNav/TopNavThree";
 import MenuFour from "@/components/Header/Menu/MenuFour";
 import SliderOne from "@/components/Slider/SliderOne";
+import Menu from "@/components/Footer/Menu";
 
 export default function Home() {
   return (
@@ -35,6 +36,7 @@ export default function Home() {
       <Brand />
       <Footer />
       <ModalNewsletter />
+      <Menu />
     </>
   );
 }

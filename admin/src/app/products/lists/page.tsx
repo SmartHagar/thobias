@@ -76,7 +76,10 @@ const Products = () => {
           setDelete={setDelete}
         />
         <div className="mb-4 flex justify-between">
-          <p>Silahkan Mengolah data Produk</p>
+          <p>
+            Silahkan Mengolah data Produk. Klik pada produk untuk mengolah data
+            variasi dan gambar produk.
+          </p>
           <button className="btn btn-primary" onClick={handleTambah}>
             Tambah Data
           </button>

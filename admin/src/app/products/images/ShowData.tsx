@@ -1,6 +1,5 @@
 /** @format */
 "use client";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import PaginationDefault from "@/components/pagination/PaginationDefault";
 import TablesDefault from "@/components/tables/TablesDefault";
 import { useSearchParams } from "next/navigation";
@@ -72,15 +71,15 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, product_variant_id }) => {
   }, [search, sortby, order, page, limit]);
 
   // table
-  const headTable = ["No", "Position", "Gambar", "Aksi"];
-  const tableBodies = ["position", "product_img"];
+  const headTable = ["No", "Gambar", "Utama", "Aksi"];
+  const tableBodies = ["product_img", "is_main"];
 
   useEffect(() => {
     setShowSlides(
       lightImgDB({
         data: dtProductImages?.data,
         picture: "product_img",
-        title: { path: "position" },
+        title: { path: "is_main" },
         description: { path: "" },
         width: 3840,
         height: 5760,
@@ -97,7 +96,7 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, product_variant_id }) => {
         slides={showSlides}
       />
       {isLoading ? (
-        <LoadingSpiner />
+        <span className="loading loading-infinity loading-lg"></span>
       ) : (
         <>
           <div className="">
@@ -111,7 +110,6 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, product_variant_id }) => {
               setDelete={setDelete}
               ubah={true}
               hapus={true}
-              sorter="position"
               setIndexBox={setIndexBox}
             />
           </div>

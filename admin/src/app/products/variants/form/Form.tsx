@@ -6,9 +6,7 @@ import toastShow from "@/utils/toast-show";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import BodyForm from "./BodyForm";
-import BtnDefault from "@/components/button/BtnDefault";
 import submitData from "@/services/submitData";
-import LoadingSpiner from "@/components/loading/LoadingSpiner";
 import VariantsTypes from "@/types/Variants";
 import useVariants from "@/stores/crud/Variants";
 
@@ -44,22 +42,20 @@ const Form = ({
   // reset form
   const resetForm = () => {
     setValue("id", "");
-    setValue("variant_nm", "");
-    setValue("attribute_nm", "");
+    setValue("color", "");
+    setValue("size", "");
     setValue("price", 0);
-    setValue("stock", 0);
-    setValue("description", "");
+    setValue("stock", 1);
   };
 
   // data edit
   useEffect(() => {
     if (dtEdit) {
       setValue("id", dtEdit.id);
-      setValue("variant_nm", dtEdit.variant_nm);
-      setValue("attribute_nm", dtEdit.attribute_nm);
+      setValue("color", dtEdit.color);
+      setValue("size", dtEdit.size);
       setValue("price", dtEdit.price);
       setValue("stock", dtEdit.stock);
-      setValue("description", dtEdit.description);
     } else {
       resetForm();
     }
@@ -105,11 +101,15 @@ const Form = ({
         </div>
         <div>
           {isLoading ? (
-            <LoadingSpiner />
+            <span className="loading loading-spinner loading-md"></span>
           ) : (
-            <BtnDefault onClick={handleSubmit(onSubmit)} type="submit">
+            <button
+              className="btn btn-primary"
+              onClick={handleSubmit(onSubmit)}
+              type="submit"
+            >
               Simpan
-            </BtnDefault>
+            </button>
           )}
         </div>
       </form>

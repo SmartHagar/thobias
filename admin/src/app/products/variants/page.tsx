@@ -6,7 +6,6 @@ import ShowData from "./ShowData";
 import ModalDelete from "@/components/modal/ModalDelete";
 import { Toaster } from "react-hot-toast";
 import toastShow from "@/utils/toast-show";
-import BtnDefault from "@/components/button/BtnDefault";
 import { useWelcomeContext } from "@/context/WelcomeContext";
 import Searching from "./Searching";
 import { useForm } from "react-hook-form";
@@ -15,6 +14,7 @@ import VariantsTypes from "@/types/Variants";
 import Form from "./form/Form";
 import useProducts from "@/stores/crud/Products";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // type setDelete
 type Delete = {
@@ -22,13 +22,15 @@ type Delete = {
   isDelete: boolean;
 };
 // variants
-const Variants = ({ params }: { params: { productId: string } }) => {
-  const { productId } = params;
+const Variants = () => {
+  // useSearch
+  const searchParams = useSearchParams();
+  const productId = searchParams?.get("product_id") || "";
   // store
   const { removeData } = useVariants();
   const { setShowProducts, showProduct } = useProducts();
   // context
-  const halaman = "Variant";
+  const halaman = "Variasi Produk";
   const { setWelcome } = useWelcomeContext();
 
   // state
@@ -40,7 +42,7 @@ const Variants = ({ params }: { params: { productId: string } }) => {
   // getProduct
   useEffect(() => {
     setShowProducts(productId);
-  }, [productId, setShowProducts, showProduct]);
+  }, [productId]);
 
   useEffect(() => {
     setWelcome(`Halaman ${halaman} - ${showProduct?.product_nm}`);
@@ -94,8 +96,10 @@ const Variants = ({ params }: { params: { productId: string } }) => {
           Kembali
         </Link>
         <div className="mb-4 flex justify-between">
-          <p>Silahkan Mengolah data Variants</p>
-          <BtnDefault onClick={handleTambah}>Tambah Data</BtnDefault>
+          <p>Silahkan Mengolah data {halaman}</p>
+          <button className="btn btn-primary" onClick={handleTambah}>
+            Tambah Data
+          </button>
         </div>
       </div>
 

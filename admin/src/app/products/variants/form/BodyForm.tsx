@@ -2,10 +2,8 @@
 "use client";
 import InputRupiah from "@/components/input/InputRupiah";
 import InputTextDefault from "@/components/input/InputTextDefault";
-import RichTextEditor from "@/components/input/RichTextEditor";
-import SelectDef from "@/components/select/SelectDef";
 import VariantsTypes from "@/types/Variants";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { FieldErrors } from "react-hook-form";
 
 // variants
@@ -18,46 +16,23 @@ type Props = {
   setValue: unknown;
   showModal: boolean;
 };
-const BodyForm: FC<Props> = ({
-  register,
-  errors,
-  control,
-  watch,
-  setValue,
-  dtEdit,
-}) => {
-  const [variation, setVariation] = useState<string>("");
-
-  const attribute = watch("attribute_nm");
-  useEffect(() => {
-    setVariation(attribute);
-
-    return () => {};
-  }, [attribute]);
-
+const BodyForm: FC<Props> = ({ register, errors, control }) => {
   return (
     <>
-      <SelectDef
-        label="Variasi"
-        placeholder="Pilih Variasi"
-        control={control}
-        name="attribute_nm"
-        options={[
-          { value: "warna", label: "Warna" },
-          { value: "ukuran", label: "Ukuran" },
-        ]}
-        addClass={`col-span-8 lg:col-span-4`}
-      />
-
       <InputTextDefault
-        label={variation}
-        name="variant_nm"
+        label="Warna"
+        name="color"
         register={register}
-        errors={errors.variant_nm}
-        required
+        errors={errors.color}
         addClass="col-span-8 lg:col-span-4"
       />
-
+      <InputTextDefault
+        label="Ukuran"
+        name="size"
+        register={register}
+        errors={errors.size}
+        addClass="col-span-8 lg:col-span-4"
+      />
       <InputTextDefault
         label="Stock"
         name="stock"
@@ -76,15 +51,6 @@ const BodyForm: FC<Props> = ({
         addClass="col-span-8  lg:col-span-6"
         required
         minLength={1}
-      />
-      <RichTextEditor
-        control={control}
-        name="description"
-        label="Description"
-        addClass="col-span-8"
-        errors={errors.description}
-        initialValue={dtEdit?.description || ""}
-        setValue={setValue}
       />
     </>
   );

@@ -83,7 +83,7 @@ const useVariants = create(
         const token = await useLogin.getState().setToken();
         const response = await crud({
           method: "get",
-          url: `/variants`,
+          url: `/productVariants`,
           headers: { Authorization: `Bearer ${token}` },
           params: {
             limit,
@@ -115,7 +115,7 @@ const useVariants = create(
         const token = await useLogin.getState().setToken();
         const response = await crud({
           method: "get",
-          url: `/variants/${id}`,
+          url: `/productVariants/${id}`,
           headers: { Authorization: `Bearer ${token}` },
         });
         set((state) => ({
@@ -138,7 +138,7 @@ const useVariants = create(
         const token = await useLogin.getState().setToken();
         const res = await crud({
           method: "post",
-          url: `/variants`,
+          url: `/productVariants`,
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -167,7 +167,7 @@ const useVariants = create(
         const token = await useLogin.getState().setToken();
         const res = await crud({
           method: "delete",
-          url: `/variants/${id}`,
+          url: `/productVariants/${id}`,
           headers: { Authorization: `Bearer ${token}` },
         });
         set((prevState) => ({
@@ -195,7 +195,7 @@ const useVariants = create(
         const token = await useLogin.getState().setToken();
         const response = await crud({
           method: "PUT",
-          url: `/variants/${id}`,
+          url: `/productVariants/${id}`,
           headers: { Authorization: `Bearer ${token}` },
           data: row,
         });

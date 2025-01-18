@@ -1,7 +1,7 @@
 /** @format */
 
+import InputCheck from "@/components/input/InputCheck";
 import InputMultiFiles from "@/components/input/InputMultiFiles";
-import InputTextDefault from "@/components/input/InputTextDefault";
 import ProductImagesTypes from "@/types/ProductImages";
 import { FC } from "react";
 import { FieldErrors } from "react-hook-form";
@@ -19,16 +19,16 @@ type Props = {
 const BodyForm: FC<Props> = ({ register, errors, setValue, watch, dtEdit }) => {
   return (
     <>
-      <InputTextDefault
-        label="Posisi"
-        name="position"
-        register={register}
-        required
-        type="number"
-        min={1}
-        errors={errors.position}
-        addClass="col-span-8"
-      />
+      <div className="col-span-8 flex gap-1 items-center">
+        <span>Gambar Utama?</span>
+        <InputCheck
+          value={dtEdit?.is_main}
+          name="is_main"
+          register={register}
+          errors={errors.is_main}
+          id={"is_main"}
+        />
+      </div>
       <InputMultiFiles
         label="Gambar"
         name="product_img"
