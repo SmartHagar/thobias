@@ -4,26 +4,20 @@
 
 import React, { useState, useEffect } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-// import { usePathname } from "next/navigation";
-// import productData from "@/data/Product.json";
-// import useMenuMobile from "@/store/useMenuMobile";
+import { usePathname } from "next/navigation";
+import productData from "@/data/Product.json";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import { useModalWishlistContext } from "@/context/ModalWishlistContext";
-import { useCart } from "@/context/CartContext";
 import { useRouter } from "next/navigation";
-// import ListMenu from "./NavbarMenu";
-// import Mobile from "./Mobile";
+import ListMenu from "./NavbarMenu";
 
 interface Props {
   props: string;
 }
 
 const MenuFour: React.FC<Props> = ({ props }) => {
-  // const pathname = usePathname();
-  // const { openMenuMobile, handleMenuMobile } = useMenuMobile();
-  // const [openSubNavMobile, setOpenSubNavMobile] = useState<number | null>(null);
+  const pathname = usePathname();
   const { openModalCart } = useModalCartContext();
-  const { cartState } = useCart();
   const { openModalWishlist } = useModalWishlistContext();
   const [searchKeyword, setSearchKeyword] = useState("");
   const router = useRouter();
@@ -32,10 +26,6 @@ const MenuFour: React.FC<Props> = ({ props }) => {
     router.push(`/search-result?query=${value}`);
     setSearchKeyword("");
   };
-
-  // const handleOpenSubNavMobile = (index: number) => {
-  //   setOpenSubNavMobile(openSubNavMobile === index ? null : index);
-  // };
 
   const [fixedHeader, setFixedHeader] = useState(false);
   const [lastScrollPosition, setLastScrollPosition] = useState(0);
@@ -56,18 +46,6 @@ const MenuFour: React.FC<Props> = ({ props }) => {
     };
   }, [lastScrollPosition]);
 
-  // const handleGenderClick = (gender: string) => {
-  //   router.push(`/shop/breadcrumb1?gender=${gender}`);
-  // };
-
-  // const handleCategoryClick = (category: string) => {
-  //   router.push(`/shop/breadcrumb1?category=${category}`);
-  // };
-
-  // const handleTypeClick = (type: string) => {
-  //   router.push(`/shop/breadcrumb1?type=${type}`);
-  // };
-
   return (
     <>
       <div
@@ -77,14 +55,8 @@ const MenuFour: React.FC<Props> = ({ props }) => {
       >
         <div className="container mx-auto h-full">
           <div className="header-main flex items-center justify-between h-full">
-            {/* <div
-              className="menu-mobile-icon lg:hidden flex items-center"
-              onClick={handleMenuMobile}
-            >
-              <i className="icon-category text-2xl"></i>
-            </div> */}
             {/* search */}
-            <div className="form-search relative lg:hidden z-[1]">
+            <div className="form-search relative z-[1]">
               <Icon.MagnifyingGlass
                 size={16}
                 className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
@@ -94,7 +66,7 @@ const MenuFour: React.FC<Props> = ({ props }) => {
               />
               <input
                 type="text"
-                placeholder="Apa yang anda butuhkan?"
+                placeholder="Apa yag anda cari?"
                 className=" h-10 rounded-lg border border-line caption2 w-full pl-9 pr-4"
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
@@ -103,33 +75,11 @@ const MenuFour: React.FC<Props> = ({ props }) => {
                 }
               />
             </div>
+
             <div></div>
-            <div className="form-search relative max-lg:hidden z-[1]">
-              <Icon.MagnifyingGlass
-                size={16}
-                className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                onClick={() => {
-                  handleSearch(searchKeyword);
-                }}
-              />
-              <input
-                type="text"
-                placeholder="Apa yang anda butuhkan?"
-                className=" h-10 rounded-lg border border-line caption2 w-full pl-9 pr-4"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && handleSearch(searchKeyword)
-                }
-              />
-            </div>
-            {/* <ListMenu
-              handleCategoryClick={handleCategoryClick}
-              handleGenderClick={handleGenderClick}
-              handleTypeClick={handleTypeClick}
-              productData={productData}
-              pathname={pathname}
-            /> */}
+            {/* listmenu */}
+            <ListMenu productData={productData} pathname={pathname} />
+
             <div className="right flex gap-12 z-[1]">
               <div className="list-action flex items-center gap-4">
                 <div
@@ -144,7 +94,7 @@ const MenuFour: React.FC<Props> = ({ props }) => {
                 >
                   <Icon.Handbag size={24} color="black" />
                   <span className="quantity cart-quantity absolute -right-1.5 -top-1.5 text-xs text-white bg-black w-4 h-4 flex items-center justify-center rounded-full">
-                    {cartState.cartArray.length}
+                    {/* {cartState.cartArray.length} */}
                   </span>
                 </div>
               </div>
@@ -152,18 +102,6 @@ const MenuFour: React.FC<Props> = ({ props }) => {
           </div>
         </div>
       </div>
-
-      {/* <Mobile
-        openMenuMobile={openMenuMobile}
-        handleMenuMobile={handleMenuMobile}
-        handleGenderClick={handleGenderClick}
-        handleTypeClick={handleTypeClick}
-        handleCategoryClick={handleCategoryClick}
-        productData={productData}
-        pathname={pathname}
-        openSubNavMobile={openSubNavMobile}
-        handleOpenSubNavMobile={handleOpenSubNavMobile}
-      /> */}
     </>
   );
 };

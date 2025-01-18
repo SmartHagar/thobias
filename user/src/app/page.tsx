@@ -11,21 +11,11 @@ import testimonialData from "@/data/Testimonial.json";
 import Testimonial from "@/components/Home1/Testimonial";
 import Instagram from "@/components/Home1/Instagram";
 import Brand from "@/components/Home1/Brand";
-import Footer from "@/components/Footer/Footer";
 import ModalNewsletter from "@/components/Modal/ModalNewsletter";
-import TopNavThree from "@/components/Header/TopNav/TopNavThree";
-import MenuFour from "@/components/Header/Menu/MenuFour";
-import SliderOne from "@/components/Slider/SliderOne";
-import Menu from "@/components/Footer/Menu";
 
 export default function Home() {
   return (
     <>
-      <TopNavThree props="style-one bg-linear text-white" />
-      <div id="header" className="relative w-full">
-        <MenuFour props="bg-white" />
-        <SliderOne />
-      </div>
       <WhatNewOne data={productData} start={0} limit={4} />
       <Collection />
       <TabFeatures data={productData} start={0} limit={6} />
@@ -34,9 +24,7 @@ export default function Home() {
       <Testimonial data={testimonialData} limit={6} />
       <Instagram />
       <Brand />
-      <Footer />
       <ModalNewsletter />
-      <Menu />
     </>
   );
 }

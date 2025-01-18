@@ -6,12 +6,9 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { ProductType } from "@/type/ProductType";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import { useCart } from "@/context/CartContext";
 import { useModalCartContext } from "@/context/ModalCartContext";
-import { useWishlist } from "@/context/WishlistContext";
-import { useModalWishlistContext } from "@/context/ModalWishlistContext";
-import { useCompare } from "@/context/CompareContext";
-import { useModalCompareContext } from "@/context/ModalCompareContext";
+// import { useModalWishlistContext } from "@/context/ModalWishlistContext";
+// import { useModalCompareContext } from "@/context/ModalCompareContext";
 import { useModalQuickviewContext } from "@/context/ModalQuickviewContext";
 import { useRouter } from "next/navigation";
 import Marquee from "react-fast-marquee";
@@ -27,12 +24,9 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
   const [activeColor, setActiveColor] = useState<string>("");
   const [activeSize, setActiveSize] = useState<string>("");
   const [openQuickShop, setOpenQuickShop] = useState<boolean>(false);
-  const { addToCart, updateCart, cartState } = useCart();
   const { openModalCart } = useModalCartContext();
-  const { addToWishlist, removeFromWishlist, wishlistState } = useWishlist();
-  const { openModalWishlist } = useModalWishlistContext();
-  const { addToCompare, removeFromCompare, compareState } = useCompare();
-  const { openModalCompare } = useModalCompareContext();
+  // const { openModalWishlist } = useModalWishlistContext();
+  // const { openModalCompare } = useModalCompareContext();
   const { openQuickview } = useModalQuickviewContext();
   const router = useRouter();
 
@@ -45,41 +39,16 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
   };
 
   const handleAddToCart = () => {
-    if (!cartState.cartArray.find((item) => item.id === data.id)) {
-      addToCart({ ...data });
-      updateCart(data.id, data.quantityPurchase, activeSize, activeColor);
-    } else {
-      updateCart(data.id, data.quantityPurchase, activeSize, activeColor);
-    }
     openModalCart();
   };
 
-  const handleAddToWishlist = () => {
-    // if product existed in wishlit, remove from wishlist and set state to false
-    if (wishlistState.wishlistArray.some((item) => item.id === data.id)) {
-      removeFromWishlist(data.id);
-    } else {
-      // else, add to wishlist and set state to true
-      addToWishlist(data);
-    }
-    openModalWishlist();
-  };
+  // const handleAddToWishlist = () => {
+  //   openModalWishlist();
+  // };
 
-  const handleAddToCompare = () => {
-    // if product existed in wishlit, remove from wishlist and set state to false
-    if (compareState.compareArray.length < 3) {
-      if (compareState.compareArray.some((item) => item.id === data.id)) {
-        removeFromCompare(data.id);
-      } else {
-        // else, add to wishlist and set state to true
-        addToCompare(data);
-      }
-    } else {
-      alert("Compare up to 3 products");
-    }
-
-    openModalCompare();
-  };
+  // const handleAddToCompare = () => {
+  //   openModalCompare();
+  // };
 
   const handleQuickviewOpen = () => {
     openQuickview(data);
@@ -116,7 +85,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
               style === "style-3" ||
               style === "style-4" ? (
                 <div className="list-action-right absolute top-3 right-3 max-lg:hidden">
-                  {style === "style-4" && (
+                  {/* {style === "style-4" && (
                     <div
                       className={`add-cart-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mb-2 ${
                         compareState.compareArray.some(
@@ -135,24 +104,24 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                       </div>
                       <Icon.ShoppingBagOpen size={20} />
                     </div>
-                  )}
+                  )} */}
                   <div
-                    className={`add-wishlist-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative ${
-                      wishlistState.wishlistArray.some(
-                        (item) => item.id === data.id
-                      )
-                        ? "active"
-                        : ""
-                    }`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddToWishlist();
-                    }}
+                  // className={`add-wishlist-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative ${
+                  //   wishlistState.wishlistArray.some(
+                  //     (item) => item.id === data.id
+                  //   )
+                  //     ? "active"
+                  //     : ""
+                  // }`}
+                  // onClick={(e) => {
+                  //   e.stopPropagation();
+                  //   handleAddToWishlist();
+                  // }}
                   >
-                    <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">
+                    {/* <div className="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">
                       Add To Wishlist
-                    </div>
-                    {wishlistState.wishlistArray.some(
+                    </div> */}
+                    {/* {wishlistState.wishlistArray.some(
                       (item) => item.id === data.id
                     ) ? (
                       <>
@@ -166,9 +135,9 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                       <>
                         <Icon.Heart size={18} />
                       </>
-                    )}
+                    )} */}
                   </div>
-                  <div
+                  {/* <div
                     className={`compare-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mt-2 ${
                       compareState.compareArray.some(
                         (item) => item.id === data.id
@@ -186,8 +155,8 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                     </div>
                     <Icon.Repeat size={18} className="compare-icon" />
                     <Icon.CheckCircle size={20} className="checked-icon" />
-                  </div>
-                  {style === "style-3" || style === "style-4" ? (
+                  </div> */}
+                  {/* {style === "style-3" || style === "style-4" ? (
                     <div
                       className={`quick-view-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative mt-2 ${
                         compareState.compareArray.some(
@@ -208,7 +177,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                     </div>
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </div>
               ) : (
                 <></>
@@ -372,7 +341,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
               ) : (
                 <></>
               )}
-              {style === "style-2" || style === "style-5" ? (
+              {/* {style === "style-2" || style === "style-5" ? (
                 <>
                   <div
                     className={`list-action flex items-center justify-center gap-3 px-5 absolute w-full ${
@@ -525,7 +494,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                 >
                   <Icon.ShoppingBagOpen className="text-lg" />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="product-infor mt-4 lg:mb-7">
               <div className="product-sold sm:pb-4 pb-2">
@@ -803,7 +772,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                         Quick Shop
                       </div>
                       <div className="list-action-right flex items-center justify-center gap-3 mt-4">
-                        <div
+                        {/* <div
                           className={`add-wishlist-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative ${
                             wishlistState.wishlistArray.some(
                               (item) => item.id === data.id
@@ -859,7 +828,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
                             size={20}
                             className="checked-icon"
                           />
-                        </div>
+                        </div> */}
                         <div
                           className="quick-view-btn-list w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative"
                           onClick={(e) => {
@@ -897,7 +866,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
               src={data.thumbImage[0]}
               alt="img"
             />
-            <div className="list-action flex flex-col gap-1 absolute top-0 right-0">
+            {/* <div className="list-action flex flex-col gap-1 absolute top-0 right-0">
               <span
                 className={`add-wishlist-btn w-8 h-8 bg-white flex items-center justify-center rounded-full box-shadow-sm duration-300 ${
                   wishlistState.wishlistArray.some(
@@ -959,7 +928,7 @@ const Product: React.FC<ProductProps> = ({ data, type, style }) => {
               >
                 <Icon.ShoppingBagOpen />
               </span>
-            </div>
+            </div> */}
           </div>
           <div className="product-infor mt-4">
             <span className="text-title">{data.name}</span>

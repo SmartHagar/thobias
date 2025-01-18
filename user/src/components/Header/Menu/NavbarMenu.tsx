@@ -6,19 +6,10 @@ import React from "react";
 
 type Props = {
   pathname: string;
-  handleGenderClick: (gender: string) => void;
-  handleTypeClick: (type: string) => void;
-  handleCategoryClick: (category: string) => void;
   productData: any[];
 };
 
-const NavbarMenu = ({
-  pathname,
-  handleGenderClick,
-  handleTypeClick,
-  handleCategoryClick,
-  productData,
-}: Props) => {
+const NavbarMenu = ({ pathname, productData }: Props) => {
   return (
     <div className="menu-main h-full xl:w-full flex items-center justify-center max-lg:hidden xl:absolute xl:top-1/2 xl:left-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2">
       <ul className="flex items-center gap-8 h-full">
@@ -48,7 +39,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleGenderClick("men")}
+                          // onClick={() => handleGenderClick("men")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Starting From 50% Off
@@ -56,7 +47,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("outerwear")}
+                          // onClick={() => handleTypeClick("outerwear")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Outerwear | Coats
@@ -64,7 +55,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("sweater")}
+                          // onClick={() => handleTypeClick("sweater")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Sweaters | Cardigans
@@ -72,7 +63,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("shirt")}
+                          // onClick={() => handleTypeClick("shirt")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Shirt | Sweatshirts
@@ -80,7 +71,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleGenderClick("men")}
+                          // onClick={() => handleGenderClick("men")}
                           className={`link text-secondary duration-300 cursor-pointer view-all-btn`}
                         >
                           View All
@@ -95,7 +86,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("shirt")}
+                          // onClick={() => handleTypeClick("shirt")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Shirt | Clothes
@@ -103,7 +94,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("top")}
+                          // onClick={() => handleTypeClick("top")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Top | Overshirts
@@ -111,7 +102,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("t-shirt")}
+                          // onClick={() => handleTypeClick("t-shirt")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           T-shirts | Clothes
@@ -119,7 +110,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("swimwear")}
+                          // onClick={() => handleTypeClick("swimwear")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Swimwear | Underwear
@@ -127,7 +118,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("fashion")}
+                          // onClick={() => handleCategoryClick("fashion")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -140,7 +131,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("face")}
+                          // onClick={() => handleTypeClick("face")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Faces Skin
@@ -148,7 +139,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("eye")}
+                          // onClick={() => handleTypeClick("eye")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Eyes Makeup
@@ -156,7 +147,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("lip")}
+                          // onClick={() => handleTypeClick("lip")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Lip Polish
@@ -164,7 +155,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("hair")}
+                          // onClick={() => handleTypeClick("hair")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Hair Care
@@ -172,7 +163,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("cosmetic")}
+                          // onClick={() => handleCategoryClick("cosmetic")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -185,7 +176,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("candle")}
+                          // onClick={() => handleTypeClick("candle")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Cented Candle
@@ -193,7 +184,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("drinks")}
+                          // onClick={() => handleTypeClick("drinks")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Health Drinks
@@ -201,7 +192,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("clothes")}
+                          // onClick={() => handleTypeClick("clothes")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Yoga Clothes
@@ -209,7 +200,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("mats")}
+                          // onClick={() => handleTypeClick("mats")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Yoga Equipment
@@ -217,7 +208,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("yoga")}
+                          // onClick={() => handleCategoryClick("yoga")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -230,7 +221,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleGenderClick("women")}
+                          // onClick={() => handleGenderClick("women")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Starting From 60% Off
@@ -238,7 +229,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("dress")}
+                          // onClick={() => handleTypeClick("dress")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Dresses | Jumpsuits
@@ -246,7 +237,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("t-shirt")}
+                          // onClick={() => handleTypeClick("t-shirt")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           T-shirts | Sweatshirts
@@ -254,7 +245,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("accessories")}
+                          // onClick={() => handleTypeClick("accessories")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Accessories | Jewelry
@@ -262,7 +253,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleGenderClick("women")}
+                          // onClick={() => handleGenderClick("women")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -275,7 +266,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("bed")}
+                          // onClick={() => handleTypeClick("bed")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Kids Bed
@@ -283,7 +274,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("toy")}
+                          // onClick={() => handleTypeClick("toy")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Boy{String.raw`'s`} Toy
@@ -291,7 +282,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("blanket")}
+                          // onClick={() => handleTypeClick("blanket")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Baby Blanket
@@ -299,7 +290,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("clothing")}
+                          // onClick={() => handleTypeClick("clothing")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Newborn Clothing
@@ -307,7 +298,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("toys-kid")}
+                          // onClick={() => handleCategoryClick("toys-kid")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -320,7 +311,7 @@ const NavbarMenu = ({
                     <ul>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("furniture")}
+                          // onClick={() => handleCategoryClick("furniture")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Furniture | Decor
@@ -328,7 +319,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("table")}
+                          // onClick={() => handleTypeClick("table")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Table | Living Room
@@ -336,7 +327,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("chair")}
+                          // onClick={() => handleTypeClick("chair")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Chair | Work Room
@@ -344,7 +335,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleTypeClick("lighting")}
+                          // onClick={() => handleTypeClick("lighting")}
                           className={`link text-secondary duration-300 cursor-pointer`}
                         >
                           Lighting | Bed Room
@@ -352,7 +343,7 @@ const NavbarMenu = ({
                       </li>
                       <li>
                         <div
-                          onClick={() => handleCategoryClick("furniture")}
+                          // onClick={() => handleCategoryClick("furniture")}
                           className={`link text-secondary duration-300 view-all-btn`}
                         >
                           View All
@@ -631,7 +622,7 @@ const NavbarMenu = ({
         </li>
         <li className="h-full flex items-center justify-center logo">
           <Link href={"/"} className="heading4">
-            Anvogue
+            WWF
           </Link>
         </li>
         <li className="h-full">

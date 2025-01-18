@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3099",
     "build": "next build",
-    "start": "next start -p 3099",
+    "start": "npx serve@latest out",
     "lint": "next lint"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-fast-marquee": "^1.6.2",
+    "react-hot-toast": "^2.5.1",
     "react-icons": "^5.4.0",
     "react-loading": "^2.0.3",
     "react-paginate": "^8.2.0",

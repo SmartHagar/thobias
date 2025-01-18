@@ -1,33 +1,26 @@
-import React from 'react'
-import { CartProvider } from '@/context/CartContext'
-import { ModalCartProvider } from '@/context/ModalCartContext'
-import { WishlistProvider } from '@/context/WishlistContext'
-import { ModalWishlistProvider } from '@/context/ModalWishlistContext'
-import { CompareProvider } from '@/context/CompareContext'
-import { ModalCompareProvider } from '@/context/ModalCompareContext'
-import { ModalSearchProvider } from '@/context/ModalSearchContext'
-import { ModalQuickviewProvider } from '@/context/ModalQuickviewContext'
+/** @format */
 
-const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return (
-        <CartProvider>
-            <ModalCartProvider>
-                <WishlistProvider>
-                    <ModalWishlistProvider>
-                        <CompareProvider>
-                            <ModalCompareProvider>
-                                <ModalSearchProvider>
-                                    <ModalQuickviewProvider>
-                                        {children}
-                                    </ModalQuickviewProvider>
-                                </ModalSearchProvider>
-                            </ModalCompareProvider>
-                        </CompareProvider>
-                    </ModalWishlistProvider>
-                </WishlistProvider>
-            </ModalCartProvider>
-        </CartProvider>
-    )
-}
+import React from "react";
+import { ModalCartProvider } from "@/context/ModalCartContext";
+import { ModalWishlistProvider } from "@/context/ModalWishlistContext";
+import { ModalCompareProvider } from "@/context/ModalCompareContext";
+import { ModalSearchProvider } from "@/context/ModalSearchContext";
+import { ModalQuickviewProvider } from "@/context/ModalQuickviewContext";
 
-export default GlobalProvider
+const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <ModalCartProvider>
+      <ModalWishlistProvider>
+        <ModalCompareProvider>
+          <ModalSearchProvider>
+            <ModalQuickviewProvider>{children}</ModalQuickviewProvider>
+          </ModalSearchProvider>
+        </ModalCompareProvider>
+      </ModalWishlistProvider>
+    </ModalCartProvider>
+  );
+};
+
+export default GlobalProvider;
