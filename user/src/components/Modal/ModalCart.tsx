@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import productData from "@/data/Product.json";
-import { ProductType } from "@/type/ProductType";
+import { ProductType } from "@/type/ProductsType";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import { countdownTime } from "@/store/countdownTime";
 import CountdownTimeType from "@/type/CountdownType";

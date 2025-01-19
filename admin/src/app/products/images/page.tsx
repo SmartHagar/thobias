@@ -100,7 +100,7 @@ const ProductImages = () => {
         />
         <Link
           className="text-neutral underline hover:no-underline"
-          href={`/admin/foods/${showVariants?.product_id}/variants`}
+          href={`/products/variants?product_id=${showVariants?.product_id}`}
         >
           Kembali
         </Link>

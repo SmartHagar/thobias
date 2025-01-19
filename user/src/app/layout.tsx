@@ -13,7 +13,6 @@ import { countdownTime } from "@/store/countdownTime";
 import Menu from "@/components/Footer/Menu";
 import TopNavThree from "@/components/Header/TopNav/TopNavThree";
 import MenuFour from "@/components/Header/Menu/MenuFour";
-import SliderOne from "@/components/Slider/SliderOne";
 
 const serverTimeLeft: CountdownTimeType = countdownTime();
 
@@ -31,11 +30,10 @@ export default function RootLayout({
     <GlobalProvider>
       <html lang="en">
         <body className="">
-          <div className="flex flex-col mb-24">
+          <div className="flex flex-col mb-20">
             <TopNavThree props="style-one bg-linear text-white" />
             <div id="header" className="relative w-full">
               <MenuFour props="bg-white" />
-              <SliderOne />
             </div>
             {children}
           </div>

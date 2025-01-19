@@ -91,12 +91,15 @@ const Variants = () => {
         />
         <Link
           className="text-neutral underline hover:no-underline"
-          href={`/admin/foods/products`}
+          href={`/products/lists`}
         >
           Kembali
         </Link>
         <div className="mb-4 flex justify-between">
-          <p>Silahkan Mengolah data {halaman}</p>
+          <p>
+            Silahkan Mengolah data {halaman}. Klik pada varian untuk mengolah
+            data gambar pada setiap varian.
+          </p>
           <button className="btn btn-primary" onClick={handleTambah}>
             Tambah Data
           </button>

@@ -5,7 +5,6 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductType } from "@/type/ProductType";
 import Product from "../Product";
 import Rate from "@/components/Other/Rate";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,6 +17,7 @@ import { useModalCartContext } from "@/context/ModalCartContext";
 import { useModalCompareContext } from "@/context/ModalCompareContext";
 import { useRouter } from "next/navigation";
 import ModalSizeguide from "@/components/Modal/ModalSizeguide";
+import ProductsTypes from "@/type/ProductsType";
 
 SwiperCore.use([Navigation, Thumbs]);
 
@@ -39,7 +39,7 @@ const Sidebar: React.FC<Props> = ({ data, productId }) => {
   const { openModalCompare } = useModalCompareContext();
   let productMain = data.find(
     (product) => product.id === productId
-  ) as ProductType;
+  ) as ProductsTypes;
   if (productMain === undefined) {
     productMain = data[0];
   }
