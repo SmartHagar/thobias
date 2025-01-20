@@ -1,5 +1,6 @@
 /** @format */
 "use client";
+import InputColor from "@/components/input/InputColor";
 import InputRupiah from "@/components/input/InputRupiah";
 import InputTextDefault from "@/components/input/InputTextDefault";
 import VariantsTypes from "@/types/Variants";
@@ -16,16 +17,18 @@ type Props = {
   setValue: unknown;
   showModal: boolean;
 };
-const BodyForm: FC<Props> = ({ register, errors, control }) => {
+const BodyForm: FC<Props> = ({ register, errors, control, dtEdit }) => {
   return (
     <>
-      <InputTextDefault
-        label="Warna"
+      <InputColor
+        label="Pilih Warna"
         name="color"
         register={register}
-        errors={errors.color}
+        errors={errors}
         addClass="col-span-8 lg:col-span-4"
+        dtEdit={dtEdit?.color}
       />
+
       <InputTextDefault
         label="Ukuran"
         name="size"
