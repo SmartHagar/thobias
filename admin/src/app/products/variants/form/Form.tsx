@@ -46,6 +46,7 @@ const Form = ({
     setValue("size", "");
     setValue("price", 0);
     setValue("stock", 1);
+    setValue("variant_img", "");
   };
 
   // data edit

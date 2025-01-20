@@ -25,6 +25,10 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
   const { openQuickview } = useModalQuickviewContext();
   const router = useRouter();
 
+  const imgProduk = data?.product_variant?.[0]?.product_image.find(
+    (item) => item.is_main
+  )?.product_img;
+
   const handleAddToCart = () => {
     openModalCart();
   };
@@ -91,22 +95,14 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
           )}
           {/* image product */}
           <div className="product-img w-full h-full aspect-[3/4]">
-            {data?.product_variant?.map((img, index) => {
-              const src = img?.product_image
-                ? img?.product_image[0]?.product_img
-                : "";
-              return (
-                <Image
-                  key={index}
-                  src={`${BASE_URL}/${src}`}
-                  width={500}
-                  height={500}
-                  priority={true}
-                  alt={data.product_nm}
-                  className="w-full h-full object-cover duration-700"
-                />
-              );
-            })}
+            <Image
+              src={`${BASE_URL}/${imgProduk}`}
+              width={500}
+              height={500}
+              priority={true}
+              alt={data.product_nm || "Nama Produk"}
+              className="w-full h-full object-cover duration-700"
+            />
           </div>
           {/* botton */}
           <div className="list-action-icon flex items-center justify-center gap-2 absolute w-full bottom-3 z-[1] lg:hidden">

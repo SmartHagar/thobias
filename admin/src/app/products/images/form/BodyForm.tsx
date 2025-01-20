@@ -17,6 +17,7 @@ type Props = {
 };
 // productImages
 const BodyForm: FC<Props> = ({ register, errors, setValue, watch, dtEdit }) => {
+  console.log({ dtEdit });
   return (
     <>
       <div className="col-span-8 flex gap-1 items-center">

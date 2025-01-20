@@ -15,7 +15,7 @@ type Props = {
   setShowModal: (data: boolean) => void;
   dtEdit: ProductImagesTypes | null;
   halaman: string;
-  product_variant_id: string;
+  product_id: string;
 };
 // productImages
 const Form = ({
@@ -23,7 +23,7 @@ const Form = ({
   setShowModal,
   dtEdit,
   halaman,
-  product_variant_id,
+  product_id,
 }: Props) => {
   // store
   const { addData, updateData } = useProductImages();
@@ -58,7 +58,7 @@ const Form = ({
   }, [showModal, dtEdit]);
   // simpan data
   const onSubmit: SubmitHandler<ProductImagesTypes> = async (row) => {
-    row.product_variant_id = product_variant_id;
+    row.product_id = product_id;
     row.is_main = row.is_main ? 1 : 0;
     //  submit data
     // console.log({ row });

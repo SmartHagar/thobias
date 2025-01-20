@@ -12,9 +12,9 @@ import { useForm } from "react-hook-form";
 import useProductImages from "@/stores/crud/ProductImages";
 import ProductImagesTypes from "@/types/ProductImages";
 import Form from "./form/Form";
-import useVariants from "@/stores/crud/Variants";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import useProducts from "@/stores/crud/Products";
 
 // type setDelete
 type Delete = {
@@ -24,13 +24,13 @@ type Delete = {
 // productImages
 const ProductImages = () => {
   const searchParams = useSearchParams();
-  const productId = searchParams?.get("variant_id") || "";
+  const productId = searchParams?.get("product_id") || "";
   // context
   const halaman = "Gambar Produk";
   const { setWelcome } = useWelcomeContext();
   // store
   const { removeData } = useProductImages();
-  const { setShowVariants, showVariants } = useVariants();
+  const { setShowProducts, showProduct } = useProducts();
   // state
   const [showModal, setShowModal] = useState(false);
   const [showDelete, setShowDelete] = useState<boolean>(false);
@@ -39,24 +39,15 @@ const ProductImages = () => {
 
   // getProduct
   useEffect(() => {
-    setShowVariants(productId);
-  }, [productId, setShowVariants]);
+    setShowProducts(productId);
+  }, [productId, setShowProducts]);
 
-  console.log({ showVariants });
+  console.log({ showProduct });
 
   useEffect(() => {
-    setWelcome(
-      `Halaman ${halaman} - ${showVariants?.product.product_nm} ${
-        showVariants?.color || ""
-      } ${showVariants?.size || ""}`
-    );
+    setWelcome(`Halaman ${halaman} - ${showProduct?.product_nm}`);
     return () => {};
-  }, [
-    setWelcome,
-    showVariants?.color,
-    showVariants?.product.product_nm,
-    showVariants?.size,
-  ]);
+  }, [setWelcome, showProduct?.product_nm]);
 
   const handleTambah = () => {
     setShowModal(true);
@@ -91,7 +82,7 @@ const ProductImages = () => {
           showModal={showModal}
           setShowModal={setShowModal}
           halaman={halaman}
-          product_variant_id={productId}
+          product_id={productId}
         />
         <ModalDelete
           showDel={showDelete}
@@ -100,12 +91,12 @@ const ProductImages = () => {
         />
         <Link
           className="text-neutral underline hover:no-underline"
-          href={`/products/variants?product_id=${showVariants?.product_id}`}
+          href={`/products/lists`}
         >
           Kembali
         </Link>
         <div className="mb-4 flex justify-between">
-          <p>Silahkan Mengolah data ProductImages</p>
+          <p>Silahkan Mengolah Gambar Produk {showProduct?.product_nm}</p>
           <button className="btn btn-primary" onClick={handleTambah}>
             Tambah Data
           </button>
@@ -126,7 +117,7 @@ const ProductImages = () => {
         <ShowData
           setDelete={setDelete}
           setEdit={setEdit}
-          product_variant_id={productId}
+          product_id={productId}
         />
       </Suspense>
     </div>

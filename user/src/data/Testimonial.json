@@ -2,12 +2,12 @@
     {
         "id": "1",
         "category": "fashion",
-        "title": "Variety of Styles!",
+        "title": "Beragam Gaya!",
         "name": "Fukuda E.",
         "avatar": "/images/avatar/1.png",
-        "date": "November 10, 2023",
-        "address": "Tokyo, Japan",
-        "description": "Anvouge's exceptional customer service and attention to detail make shopping with them a pleasure. They understand my fashion needs and help me find the perfect pieces every time.",
+        "date": "10 November 2023",
+        "address": "Tokyo, Jepang",
+        "description": "Layanan pelanggan WWF yang luar biasa dan perhatian terhadap detail membuat belanja menjadi menyenangkan. Mereka memahami kebutuhan fashion saya dan selalu membantu menemukan item yang sempurna.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -17,12 +17,12 @@
     {
         "id": "2",
         "category": "fashion",
-        "title": "Quality of Clothing!",
+        "title": "Kualitas Pakaian!",
         "name": "Georgina S.",
         "avatar": "/images/avatar/2.png",
-        "date": "November 11, 2023",
-        "address": "Madrid, Spain",
-        "description": "I absolutely love this shop! The products are high-quality and the customer service is excellent. I always leave with exactly what I need and a smile on my face.",
+        "date": "11 November 2023",
+        "address": "Madrid, Spanyol",
+        "description": "Saya sangat menyukai toko ini! Produk-produk berkualitas tinggi dan layanan pelanggan sangat baik. Saya selalu mendapatkan apa yang saya butuhkan dengan senyuman.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -32,12 +32,12 @@
     {
         "id": "3",
         "category": "fashion",
-        "title": "Customer Service!",
+        "title": "Layanan Pelanggan!",
         "name": "Elizabeth A.",
         "avatar": "/images/avatar/3.png",
-        "date": "November 13, 2023",
-        "address": "Manchester, UK",
-        "description": "I love this shop! The products are always top-quality, and the staff is incredibly friendly and helpful. They go out of their way to make sure that I'm satisfied with my purchase.",
+        "date": "13 November 2023",
+        "address": "Manchester, Inggris",
+        "description": "Saya suka toko ini! Produk-produk selalu berkualitas tinggi, dan stafnya sangat ramah serta membantu. Mereka selalu memastikan saya puas dengan pembelian saya.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -47,12 +47,12 @@
     {
         "id": "4",
         "category": "fashion",
-        "title": "Quality of Clothing!",
+        "title": "Kualitas Pakaian!",
         "name": "Christin H.",
         "avatar": "/images/avatar/4.png",
-        "date": "November 15, 2023",
-        "address": "California, USA",
-        "description": "I can't get enough of Anvouge's high-quality clothing. It's comfortable, stylish, and always on-trend. The products are high-quality and the customer service is excellent.",
+        "date": "15 November 2023",
+        "address": "California, AS",
+        "description": "Saya tidak bisa berhenti memuji kualitas pakaian WWF. Nyaman, bergaya, dan selalu mengikuti tren. Produk berkualitas tinggi dan layanan pelanggan sangat baik.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -62,12 +62,12 @@
     {
         "id": "5",
         "category": "fashion",
-        "title": "Customer Service!",
+        "title": "Layanan Pelanggan!",
         "name": "Emily G.",
         "avatar": "/images/avatar/5.png",
-        "date": "November 18, 2023",
-        "address": "Paris, France",
-        "description": "Fantastic shop! Great selection, fair prices, and friendly staff. Highly recommended. The quality of the products is exceptional, and the prices are very reasonable!",
+        "date": "18 November 2023",
+        "address": "Paris, Prancis",
+        "description": "Toko yang fantastis! Pilihan yang bagus, harga yang wajar, dan staf yang ramah. Sangat direkomendasikan. Kualitas produknya luar biasa, dan harganya sangat terjangkau!",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -77,12 +77,12 @@
     {
         "id": "6",
         "category": "fashion",
-        "title": "Variety of Styles!",
+        "title": "Beragam Gaya!",
         "name": "Carolina C.",
         "avatar": "/images/avatar/6.png",
-        "date": "November 19, 2023",
-        "address": "London, UK",
-        "description": "Anvouge's fashion collection is a game-changer! Their unique and trendy pieces have completely transformed my style. It's comfortable, stylish, and always on-trend.",
+        "date": "19 November 2023",
+        "address": "London, Inggris",
+        "description": "Koleksi fashion WWF benar-benar mengubah gaya saya! Produk unik dan tren terbaru mereka sangat memukau. Nyaman, bergaya, dan selalu sesuai tren.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -92,12 +92,12 @@
     {
         "id": "7",
         "category": "yoga",
-        "title": "Quality of Clothing!",
+        "title": "Kualitas Pakaian!",
         "name": "Christin H.",
         "avatar": "/images/avatar/4.png",
-        "date": "November 15, 2023",
-        "address": "California, USA",
-        "description": "Their unique and trendy pieces have completely transformed my style.",
+        "date": "15 November 2023",
+        "address": "California, AS",
+        "description": "Produk unik dan tren terbaru mereka benar-benar mengubah gaya saya.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -107,12 +107,12 @@
     {
         "id": "8",
         "category": "yoga",
-        "title": "Customer Service!",
+        "title": "Layanan Pelanggan!",
         "name": "Emily G.",
         "avatar": "/images/avatar/5.png",
-        "date": "November 18, 2023",
-        "address": "Paris, France",
-        "description": "Exceptional customer service and attention to detail make shopping with them a pleasure",
+        "date": "18 November 2023",
+        "address": "Paris, Prancis",
+        "description": "Layanan pelanggan yang luar biasa dan perhatian terhadap detail membuat belanja menjadi menyenangkan.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -122,12 +122,12 @@
     {
         "id": "9",
         "category": "yoga",
-        "title": "Variety of Styles!",
+        "title": "Beragam Gaya!",
         "name": "Carolina C.",
         "avatar": "/images/avatar/6.png",
-        "date": "November 19, 2023",
-        "address": "London, UK",
-        "description": "I can't get enough of WWF high-quality clothing. It's comfortable, stylish, and always on-trend.",
+        "date": "19 November 2023",
+        "address": "London, Inggris",
+        "description": "Saya tidak bisa berhenti memuji kualitas pakaian WWF. Nyaman, bergaya, dan selalu sesuai tren.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -137,12 +137,12 @@
     {
         "id": "10",
         "category": "yoga",
-        "title": "Variety of Styles!",
+        "title": "Beragam Gaya!",
         "name": "Fukuda E.",
         "avatar": "/images/avatar/1.png",
-        "date": "November 10, 2023",
-        "address": "Tokyo, Japan",
-        "description": "Exceptional customer service and attention to detail make shopping with them a pleasure",
+        "date": "10 November 2023",
+        "address": "Tokyo, Jepang",
+        "description": "Layanan pelanggan yang luar biasa dan perhatian terhadap detail membuat belanja menjadi menyenangkan.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -152,12 +152,12 @@
     {
         "id": "11",
         "category": "yoga",
-        "title": "Quality of Clothing!",
+        "title": "Kualitas Pakaian!",
         "name": "Georgina S.",
         "avatar": "/images/avatar/2.png",
-        "date": "November 11, 2023",
-        "address": "Madrid, Spain",
-        "description": "I love this shop! The products are high-quality, the customer service is excellent",
+        "date": "11 November 2023",
+        "address": "Madrid, Spanyol",
+        "description": "Saya suka toko ini! Produk-produk berkualitas tinggi dan layanan pelanggan sangat baik.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"
@@ -167,12 +167,12 @@
     {
         "id": "12",
         "category": "yoga",
-        "title": "Customer Service!",
+        "title": "Layanan Pelanggan!",
         "name": "Elizabeth A.",
         "avatar": "/images/avatar/3.png",
-        "date": "November 13, 2023",
-        "address": "Manchester, UK",
-        "description": "The products are always top-quality, and the staff is incredibly friendly and helpful",
+        "date": "13 November 2023",
+        "address": "Manchester, Inggris",
+        "description": "Produk-produk selalu berkualitas tinggi, dan stafnya sangat ramah serta membantu.",
         "images": [
             "/images/product/1000x1000.png",
             "/images/product/1000x1000.png"

@@ -48,7 +48,7 @@ const getProperty = (obj: any, prop: any, index: number, setIndexBox: any) => {
       return moment(obj).format("DD/MM/YYYY");
     }
     // cek image
-    const fileProps = ["gambar", "product_img"];
+    const fileProps = ["variant_img", "product_img"];
     // cek image
     if (fileProps.includes(prop)) {
       const extension = obj.split(".").pop();

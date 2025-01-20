@@ -5,7 +5,6 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductType } from "@/type/ProductsType";
 import Product from "../Product";
 import Rate from "@/components/Other/Rate";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,11 +17,12 @@ import { useModalCartContext } from "@/context/ModalCartContext";
 
 import { useModalCompareContext } from "@/context/ModalCompareContext";
 import ModalSizeguide from "@/components/Modal/ModalSizeguide";
+import ProductsTypes from "@/type/ProductsType";
 
 SwiperCore.use([Navigation, Thumbs]);
 
 interface Props {
-  data: Array<ProductType>;
+  data: Array<ProductsTypes>;
   productId: string | number | null;
 }
 
@@ -40,14 +40,10 @@ const Default: React.FC<Props> = ({ data, productId }) => {
   const { openModalCompare } = useModalCompareContext();
   let productMain = data.find(
     (product) => product.id === productId
-  ) as ProductType;
+  ) as ProductsTypes;
   if (productMain === undefined) {
     productMain = data[0];
   }
-
-  const percentSale = Math.floor(
-    100 - (productMain?.price / productMain?.originPrice) * 100
-  );
 
   const handleOpenSizeGuide = () => {
     setOpenSizeGuide(true);

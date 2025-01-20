@@ -1,6 +1,7 @@
 /** @format */
 "use client";
 import InputColor from "@/components/input/InputColor";
+import InputFile from "@/components/input/InputFile";
 import InputRupiah from "@/components/input/InputRupiah";
 import InputTextDefault from "@/components/input/InputTextDefault";
 import VariantsTypes from "@/types/Variants";
@@ -17,7 +18,14 @@ type Props = {
   setValue: unknown;
   showModal: boolean;
 };
-const BodyForm: FC<Props> = ({ register, errors, control, dtEdit }) => {
+const BodyForm: FC<Props> = ({
+  register,
+  errors,
+  control,
+  dtEdit,
+  setValue,
+  watch,
+}) => {
   return (
     <>
       <InputColor
@@ -54,6 +62,18 @@ const BodyForm: FC<Props> = ({ register, errors, control, dtEdit }) => {
         addClass="col-span-8  lg:col-span-6"
         required
         minLength={1}
+      />
+      {/* image */}
+      <InputFile
+        label="Gambar Varian"
+        name="variant_img"
+        register={register}
+        accept="image/*"
+        errors={errors.variant_img}
+        addClass="col-span-4"
+        setValue={setValue}
+        fileEdit={dtEdit?.variant_img}
+        watch={watch}
       />
     </>
   );

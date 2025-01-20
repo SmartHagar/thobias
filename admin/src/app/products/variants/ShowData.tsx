@@ -2,7 +2,7 @@
 "use client";
 import PaginationDefault from "@/components/pagination/PaginationDefault";
 import TablesDefault from "@/components/tables/TablesDefault";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useVariants from "@/stores/crud/Variants";
@@ -30,8 +30,6 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, productId }) => {
   const sortby = searchParams?.get("sortby") || "";
   const order = searchParams?.get("order") || "";
   const search = searchParams?.get("cari") || "";
-  // router
-  const router = useRouter();
 
   // Define the debounced function outside of `useCallback`
   const debouncedFetchVariants = _.debounce((fetchVariants) => {
@@ -61,12 +59,16 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, productId }) => {
   }, [search, sortby, order, page, limit]);
 
   // table
-  const headTable = ["No", "Warna", "Ukuran", "Harga", "Stok", "Aksi"];
-  const tableBodies = ["color", "size", "price", "stock"];
-
-  const onClickTR = (row: VariantsTypes) => {
-    router.push(`/products/images?variant_id=${row.id}`);
-  };
+  const headTable = [
+    "No",
+    "Warna",
+    "Ukuran",
+    "Harga",
+    "Stok",
+    "Gambar",
+    "Aksi",
+  ];
+  const tableBodies = ["color", "size", "price", "stock", "variant_img"];
 
   return (
     <div className="flex-1 flex-col max-w-full h-full overflow-auto">
@@ -85,7 +87,6 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, productId }) => {
               setDelete={setDelete}
               ubah={true}
               hapus={true}
-              onClickTR={onClickTR}
             />
           </div>
           {dtVariants?.last_page > 1 && (

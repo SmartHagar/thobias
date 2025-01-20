@@ -1,12 +1,12 @@
 /** @format */
 
-import ProductVariantsTypes from "./Variants";
+import ProductsTypes from "./Products";
 
 // productImages
 export default interface ProductImagesTypes {
   id: string;
-  product_variant_id: string;
-  is_main: boolean | number;
+  product_id: string;
+  is_main: any;
   product_img: string;
-  product_variant: ProductVariantsTypes;
+  product: ProductsTypes;
 }

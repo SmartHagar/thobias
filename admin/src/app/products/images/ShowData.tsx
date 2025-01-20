@@ -18,10 +18,10 @@ type DeleteProps = {
 type Props = {
   setDelete: ({ id, isDelete }: DeleteProps) => void;
   setEdit: (row: ProductImagesTypes) => void;
-  product_variant_id: string;
+  product_id: string;
 };
 
-const ShowData: FC<Props> = ({ setDelete, setEdit, product_variant_id }) => {
+const ShowData: FC<Props> = ({ setDelete, setEdit, product_id }) => {
   const { setProductImages, dtProductImages } = useProductImages();
   // state
   const [page, setPage] = useState<number>(1);
@@ -48,18 +48,10 @@ const ShowData: FC<Props> = ({ setDelete, setEdit, product_variant_id }) => {
       search,
       sortby,
       order,
-      product_variant_id,
+      product_id,
     });
     setIsLoading(false);
-  }, [
-    setProductImages,
-    page,
-    limit,
-    search,
-    sortby,
-    order,
-    product_variant_id,
-  ]);
+  }, [setProductImages, page, limit, search, sortby, order, product_id]);
 
   useEffect(() => {
     debouncedFetchproductImages(fetchproductImages);

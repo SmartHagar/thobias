@@ -7,6 +7,7 @@ import { FC, useCallback, useEffect, useState } from "react";
 import _ from "lodash";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
+import { BsImage } from "react-icons/bs";
 
 type DeleteProps = {
   id?: number | string;
@@ -80,6 +81,18 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
     gotTo(`/products/variants?product_id=${row.id}`);
   };
 
+  const costume = (row: ProductsTypes) => {
+    return (
+      <BsImage
+        onClick={(e: any) => {
+          e.stopPropagation();
+          gotTo(`/products/images?product_id=${row.id}`);
+        }}
+        className="cursor-pointer hover:text-primary"
+      />
+    );
+  };
+
   return (
     <div className="flex-1 flex-col max-w-full h-full overflow-auto">
       {isLoading ? (
@@ -98,6 +111,7 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
               ubah={true}
               hapus={true}
               onClickTR={onClickTR}
+              costume={costume}
             />
           </div>
           {dtProducts?.last_page > 1 && (

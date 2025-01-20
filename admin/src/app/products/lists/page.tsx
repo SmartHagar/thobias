@@ -78,7 +78,7 @@ const Products = () => {
         <div className="mb-4 flex justify-between">
           <p>
             Silahkan Mengolah data Produk. Klik pada produk untuk mengolah data
-            variasi dan gambar produk.
+            variasi produk.
           </p>
           <button className="btn btn-primary" onClick={handleTambah}>
             Tambah Data

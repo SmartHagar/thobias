@@ -31,7 +31,7 @@ const WhatNewOne = () => {
     if (activeTab) {
       setIsLoading(true);
       setProducts({
-        limit: 6,
+        limit: 4,
         sub_category_id: activeTab,
       });
       setIsLoading(false);
@@ -41,8 +41,6 @@ const WhatNewOne = () => {
   const handleTabClick = (type: string) => {
     setActiveTab(type);
   };
-
-  console.log({ dtProducts });
 
   return (
     <>
