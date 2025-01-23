@@ -34,7 +34,7 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
     openModalCart();
   };
 
-  const price = data?.product_variant?.[0]?.price || 0;
+  const price = data?.product_variant?.[0]?.price || data.price;
 
   // const handleAddToWishlist = () => {
   //   openModalWishlist();
@@ -151,7 +151,7 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
                 <span className="max-sm:text-xs">
                   {data?.product_variant?.reduce(
                     (acc, item) => acc + item.stock,
-                    0
+                    data.stock
                   )}
                 </span>
               </div>

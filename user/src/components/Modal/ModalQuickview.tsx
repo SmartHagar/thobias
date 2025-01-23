@@ -8,13 +8,16 @@ import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalQuickviewContext } from "@/context/ModalQuickviewContext";
 import { BASE_URL } from "@/services/baseURL";
+import toastShow from "@/utils/toast-show";
+import { Toaster } from "react-hot-toast";
+import showRupiah from "@/services/rupiah";
+import addToCart from "@/utils/addToCart";
 
 const ModalQuickview = () => {
   // state
   const [activeColor, setActiveColor] = useState<string | null>("");
   const [activeSize, setActiveSize] = useState<string | null>("");
   const [quantity, setQuantity] = useState(1);
-  const [stock, setStock] = useState(0);
   // context
   const { selectedProduct, closeQuickview } = useModalQuickviewContext();
 
@@ -41,21 +44,13 @@ const ModalQuickview = () => {
     resetState();
   }, [selectedProduct]);
 
-  useEffect(() => {
-    if (selectedProduct) {
-      const stock =
-        selectedProduct?.product_variant?.reduce(
-          (acc, item) => acc + item.stock,
-          0
-        ) || 0;
-      setStock(stock);
-    }
-  }, [selectedProduct, activeSize]);
-
   // Ambil daftar color unik
   const uniqueColors = Array.from(
     new Set(
-      selectedProduct?.product_variant.map((item) => item.color).filter(Boolean)
+      selectedProduct?.product_variant
+        .filter((item) => (activeSize ? item.size === activeSize : true))
+        .map((item) => item.color)
+        .filter(Boolean)
     )
   );
 
@@ -69,34 +64,98 @@ const ModalQuickview = () => {
     )
   );
 
+  const findSelectedVariant = () => {
+    // If product has no variants, return the product details
+    if (!selectedProduct?.has_variants) {
+      return {
+        id: selectedProduct?.id,
+        product_id: selectedProduct?.id,
+        price: selectedProduct?.price,
+        stock: selectedProduct?.stock,
+      };
+    }
+
+    // If both size and color are required but not selected, return null
+    if (
+      selectedProduct.product_variant.some((variant) => variant.size) &&
+      !activeSize &&
+      selectedProduct.product_variant.some((variant) => variant.color) &&
+      !activeColor
+    ) {
+      return null;
+    }
+
+    // Find variant based on selected size and/or color
+    const selectedVariant = selectedProduct.product_variant.find(
+      (variant) =>
+        (!activeSize || variant.size === activeSize) &&
+        (!activeColor || variant.color === activeColor)
+    );
+
+    // Return variant details with product_variant_id if found
+    return selectedVariant
+      ? {
+          ...selectedVariant,
+          product_id: selectedVariant.product_id,
+          product_variant_id: selectedVariant.id,
+        }
+      : null;
+  };
+
   // Handle perubahan pada color
   const handleActiveColor = (color: string) => {
     setActiveColor(color);
-    setActiveSize(null); // Reset size saat color berubah
+    findSelectedVariant();
   };
 
   // Handle perubahan pada size
   const handleActiveSize = (size: string) => {
     setActiveSize(size);
+    findSelectedVariant();
   };
 
-  const handleAddToCart = (item) => {
-    console.log({ item });
+  const selectedVariantOrProduct = findSelectedVariant();
+
+  const handleAddToCart = () => {
+    if (!selectedVariantOrProduct) {
+      return toastShow({
+        event: {
+          type: "error",
+          message: "Pilih ukuran dan warna terlebih dahulu",
+        },
+      });
+    }
+    if (selectedVariantOrProduct) {
+      addToCart(selectedVariantOrProduct as any);
+    }
   };
 
   const handleIncreaseQuantity = () => {
-    setQuantity((prevQuantity) => {
-      if (prevQuantity < stock) {
-        return prevQuantity + 1;
-      }
-      return prevQuantity; // Tetap pada nilai sebelumnya jika sudah 20
-    });
+    if (selectedVariantOrProduct?.stock) {
+      const stock = selectedVariantOrProduct.stock;
+      setQuantity((prevQuantity) => {
+        if (prevQuantity < stock) {
+          return prevQuantity + 1;
+        }
+        return prevQuantity; // Tetap pada nilai sebelumnya jika sudah 20
+      });
+    } else {
+      toastShow({
+        event: {
+          type: "error",
+          message: "Pilih ukuran atau warna terlebih dahulu",
+        },
+      });
+    }
   };
   const handleDecreaseQuantity = () =>
     setQuantity((prevQuiantity) => Math.max(prevQuiantity - 1, 1));
 
+  console.log({ selectedVariantOrProduct });
+
   return (
     <>
+      <Toaster />
       <div className={`modal-quickview-block`} onClick={closeQuickview}>
         <div
           className={`modal-quickview-main py-6 ${
@@ -141,14 +200,16 @@ const ModalQuickview = () => {
                 </div>
               </div>
               <div className="product-infor px-4">
-                {/* <div className="flex justify-between">
+                <div className="flex justify-between">
                   <div>
                     <div className="caption2 text-secondary font-semibold uppercase">
-                      {selectedProduct?.type}
+                      Produk
                     </div>
-                    <div className="heading4 mt-1">{selectedProduct?.name}</div>
+                    <div className="heading4 mt-1">
+                      {selectedProduct?.product_nm}
+                    </div>
                   </div>
-                  <div
+                  {/* <div
                     className={`add-wishlist-btn w-10 h-10 flex items-center justify-center border border-line cursor-pointer rounded-lg duration-300 flex-shrink-0 hover:bg-black hover:text-white ${
                       wishlistState.wishlistArray.some(
                         (item) => item.id === selectedProduct?.id
@@ -173,96 +234,88 @@ const ModalQuickview = () => {
                         <Icon.Heart size={20} />
                       </>
                     )}
-                  </div>
+                  </div> */}
                 </div>
                 <div className="flex items-center mt-3">
-                  <Rate currentRate={selectedProduct?.rate} size={14} />
+                  {/* <Rate currentRate={selectedProduct?.rate} size={14} />
                   <span className="caption1 text-secondary">
                     (1.234 reviews)
-                  </span>
+                  </span> */}
                 </div>
                 <div className="flex items-center gap-3 flex-wrap mt-5 pb-6 border-b border-line">
                   <div className="product-price heading5">
-                    ${selectedProduct?.price}.00
+                    {showRupiah(selectedVariantOrProduct?.price || 0)}
                   </div>
-                  <div className="w-px h-4 bg-line"></div>
-                  <div className="product-origin-price font-normal text-secondary2">
-                    <del>${selectedProduct?.originPrice}.00</del>
+                  <div className="desc text-secondary mt-3">
+                    {selectedProduct?.product_desc}
                   </div>
-                  {selectedProduct?.originPrice && (
-                    <div className="product-sale caption2 font-semibold bg-green px-3 py-0.5 inline-block rounded-full">
-                      -{percentSale}%
+                </div>
+                <div className="list-action mt-6">
+                  {uniqueColors.length > 0 && (
+                    <div className="choose-color">
+                      <div className="text-title">
+                        Colors:{" "}
+                        <span className="text-title color">{activeColor}</span>
+                      </div>
+                      <div className="list-color flex items-center gap-2 flex-wrap mt-3">
+                        <div className="right flex items-center gap-3">
+                          <div className="select-block relative">
+                            <select
+                              id="select-filter"
+                              name="select-filter"
+                              className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
+                              onChange={(e) => {
+                                handleActiveColor(e.target.value);
+                              }}
+                            >
+                              {uniqueColors.map((item, index) => (
+                                <option value={item} key={index}>
+                                  {item}
+                                </option>
+                              ))}
+                            </select>
+                            <Icon.CaretDown
+                              size={12}
+                              className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   )}
-                  <div className="desc text-secondary mt-3">
-                    {selectedProduct?.description}
-                  </div>
-                </div> */}
-                <div className="list-action mt-6">
-                  <div className="choose-color">
-                    <div className="text-title">
-                      Colors:{" "}
-                      <span className="text-title color">{activeColor}</span>
-                    </div>
-                    <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                      <div className="right flex items-center gap-3">
-                        <div className="select-block relative">
-                          <select
-                            id="select-filter"
-                            name="select-filter"
-                            className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
-                            onChange={(e) => {
-                              handleActiveColor(e.target.value);
-                            }}
-                            defaultValue={"Warna"}
+
+                  {uniqueSizes.length > 0 && (
+                    <div className="choose-size mt-5">
+                      <div className="heading flex items-center justify-between">
+                        <div className="text-title">
+                          Size:{" "}
+                          <span className="text-title size">{activeSize}</span>
+                        </div>
+                      </div>
+                      <div className="list-size flex items-center gap-2 flex-wrap mt-3">
+                        {uniqueSizes.map((size, index) => (
+                          <div
+                            className={`size-item ${
+                              size === "freesize" ? "px-3 py-2" : "w-12 h-12"
+                            } flex items-center justify-center text-button rounded-full bg-white border border-line ${
+                              activeSize === size ? "active" : ""
+                            }`}
+                            key={index}
+                            onClick={() => handleActiveSize(size)}
                           >
-                            <option value="Warna" disabled>
-                              Warna
-                            </option>
-                            {uniqueColors.map((item, index) => (
-                              <option value={item} key={index}>
-                                {item}
-                              </option>
-                            ))}
-                          </select>
-                          <Icon.CaretDown
-                            size={12}
-                            className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
-                          />
-                        </div>
+                            {size}
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  </div>
-                  <div className="choose-size mt-5">
-                    <div className="heading flex items-center justify-between">
-                      <div className="text-title">
-                        Size:{" "}
-                        <span className="text-title size">{activeSize}</span>
-                      </div>
-                    </div>
-                    <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                      {uniqueSizes.map((size, index) => (
-                        <div
-                          className={`size-item ${
-                            size === "freesize" ? "px-3 py-2" : "w-12 h-12"
-                          } flex items-center justify-center text-button rounded-full bg-white border border-line ${
-                            activeSize === size ? "active" : ""
-                          }`}
-                          key={index}
-                          onClick={() => handleActiveSize(size)}
-                        >
-                          {size}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  )}
                   <div className="text-title mt-5">Quantity:</div>
                   <div className="choose-quantity flex items-center max-xl:flex-wrap lg:justify-between gap-5 mt-3">
                     <div className="quantity-block md:p-3 max-md:py-1.5 max-md:px-3 flex items-center justify-between rounded-lg border border-line sm:w-[180px] w-[120px] flex-shrink-0">
                       <Icon.Minus
                         onClick={handleDecreaseQuantity}
                         className={`${
-                          selectedProduct?.quantityPurchase === 1
+                          selectedVariantOrProduct?.stock === 1
                             ? "disabled"
                             : ""
                         } cursor-pointer body1`}
@@ -273,16 +326,19 @@ const ModalQuickview = () => {
                         className="cursor-pointer body1"
                       />
                     </div>
+                    {selectedVariantOrProduct?.stock && (
+                      <span>Stock: {selectedVariantOrProduct?.stock}</span>
+                    )}
                     <div
                       onClick={handleAddToCart}
                       className="button-main w-full text-center bg-white text-black border border-black"
                     >
-                      Add To Cart
+                      Tambahkan Keranjang
                     </div>
                   </div>
                   <div className="button-block mt-5">
                     <div className="button-main w-full text-center">
-                      Buy It Now
+                      Beli Sekarang
                     </div>
                   </div>
                   <div className="more-infor mt-6">
@@ -291,13 +347,6 @@ const ModalQuickview = () => {
                       <div className="text-secondary">
                         kategori
                         {/* {selectedProduct?.category}, {selectedProduct?.gender} */}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 mt-3">
-                      <div className="text-title">Tag:</div>
-                      <div className="text-secondary">
-                        tipe
-                        {/* {selectedProduct?.type} */}
                       </div>
                     </div>
                   </div>

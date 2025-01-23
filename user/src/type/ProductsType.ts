@@ -12,6 +12,9 @@ export default interface ProductsTypes {
   sub_category_id: string;
   product_nm: string;
   product_desc: string;
+  has_variants: boolean;
+  price: number;
+  stock: number;
   subCategory: SubCategoriesTypes;
   review: ReviewsTypes[];
   order_item: OrderItemsTypes[];

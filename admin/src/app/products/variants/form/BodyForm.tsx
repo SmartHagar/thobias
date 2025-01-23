@@ -72,6 +72,7 @@ const BodyForm: FC<Props> = ({
         setValue={setValue}
         fileEdit={dtEdit?.variant_img}
         watch={watch}
+        required
       />
     </>
   );
