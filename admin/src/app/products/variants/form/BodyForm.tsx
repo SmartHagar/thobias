@@ -1,6 +1,5 @@
 /** @format */
 "use client";
-import InputColor from "@/components/input/InputColor";
 import InputFile from "@/components/input/InputFile";
 import InputRupiah from "@/components/input/InputRupiah";
 import InputTextDefault from "@/components/input/InputTextDefault";
@@ -28,13 +27,12 @@ const BodyForm: FC<Props> = ({
 }) => {
   return (
     <>
-      <InputColor
-        label="Pilih Warna"
+      <InputTextDefault
+        label="Warna"
         name="color"
         register={register}
-        errors={errors}
+        errors={errors.color}
         addClass="col-span-8 lg:col-span-4"
-        dtEdit={dtEdit?.color}
       />
 
       <InputTextDefault

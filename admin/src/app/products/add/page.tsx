@@ -1,7 +1,6 @@
 /** @format */
 "use client";
 import InputTextDefault from "@/components/input/InputTextDefault";
-import ModalDefault from "@/components/modal/ModalDefault";
 import toastShow from "@/utils/toast-show";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -9,19 +8,33 @@ import BodyForm from "./BodyForm";
 import submitData from "@/services/submitData";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
+import { useSearchParams } from "next/navigation";
 
-type Props = {
-  showModal: boolean;
-  setShowModal: (data: boolean) => void;
-  dtEdit: ProductsTypes | null;
-  halaman: string;
-};
 // products
-const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
+const AddProduct = () => {
   // store
-  const { addData, updateData } = useProducts();
+  const { addData, updateData, setShowProducts, showProduct } = useProducts();
   // state
   const [isLoading, setIsLoading] = useState(false);
+  const [dtEdit, setDtEdit] = useState<ProductsTypes | null>(null);
+  // useSearch
+  const searchParams = useSearchParams();
+  const productId = searchParams?.get("product_id") || "";
+
+  // if productId call setShow
+  useEffect(() => {
+    if (productId) {
+      setShowProducts(productId);
+    } else {
+      setDtEdit(null);
+    }
+  }, [productId, setShowProducts]);
+  // if showProduct call setDtEdit
+  useEffect(() => {
+    if (showProduct) {
+      setDtEdit(showProduct);
+    }
+  }, [showProduct]);
   // hook form
   const {
     register,
@@ -36,8 +49,6 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
   const resetForm = () => {
     setValue("id", "");
     setValue("product_nm", "");
-    setValue("stock", "");
-    setValue("price", "");
   };
 
   // data edit
@@ -45,23 +56,20 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
     if (dtEdit) {
       setValue("id", dtEdit.id);
       setValue("product_nm", dtEdit.product_nm);
-      setValue("price", dtEdit.price);
-      setValue("stock", dtEdit.stock);
+      setValue("sub_category_id", dtEdit.sub_category_id);
     } else {
       resetForm();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showModal, dtEdit]);
+  }, [dtEdit]);
   // simpan data
   const onSubmit: SubmitHandler<ProductsTypes> = async (row) => {
     //  submit data
-    // console.log({ row });
+    console.log({ row });
     // return;
     submitData({
       row,
       dtEdit,
       setIsLoading,
-      setShowModal,
       addData,
       updateData,
       resetForm,
@@ -70,15 +78,10 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
   };
 
   return (
-    <ModalDefault
-      title={`Form ${halaman}`}
-      showModal={showModal}
-      setShowModal={setShowModal}
-      width="md:w-[50rem] lg:w-[65rem]"
-    >
+    <section className="flex flex-col">
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputTextDefault name="id" register={register} type="hidden" />
-        <div className="grid grid-cols-8 gap-2 mb-4">
+        <div className="grid grid-cols-8 gap-8 mb-4">
           <BodyForm
             register={register}
             errors={errors}
@@ -86,7 +89,6 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
             control={control}
             watch={watch}
             setValue={setValue}
-            showModal={showModal}
           />
         </div>
         <div>
@@ -103,8 +105,8 @@ const Form = ({ showModal, setShowModal, dtEdit, halaman }: Props) => {
           )}
         </div>
       </form>
-    </ModalDefault>
+    </section>
   );
 };
 
-export default Form;
+export default AddProduct;

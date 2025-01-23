@@ -3,29 +3,97 @@
 "use client";
 
 // Quickview.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalQuickviewContext } from "@/context/ModalQuickviewContext";
-import ModalSizeguide from "./ModalSizeguide";
+import { BASE_URL } from "@/services/baseURL";
 
 const ModalQuickview = () => {
   // state
-  const [activeColor, setActiveColor] = useState<string>("");
-  const [openSizeGuide, setOpenSizeGuide] = useState<boolean>(false);
+  const [activeColor, setActiveColor] = useState<string | null>("");
+  const [activeSize, setActiveSize] = useState<string | null>("");
+  const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState(0);
   // context
   const { selectedProduct, closeQuickview } = useModalQuickviewContext();
 
-  const handleActiveColor = (item: string) => {
-    setActiveColor(item);
-  };
-  const handleCloseSizeGuide = () => {
-    setOpenSizeGuide(false);
+  // productImg
+  const productImgs = [
+    ...(selectedProduct?.product_image &&
+    selectedProduct?.product_image?.length > 0
+      ? selectedProduct?.product_image.map((item) => item.product_img)
+      : []),
+    ...(selectedProduct?.product_variant &&
+    selectedProduct?.product_variant?.length > 0
+      ? selectedProduct?.product_variant.map((item) => item.variant_img)
+      : []),
+  ];
+
+  // reset state
+  const resetState = () => {
+    setActiveColor("");
+    setActiveSize("");
+    setQuantity(1);
   };
 
-      const handleOpenSizeGuide = () => {
-        setOpenSizeGuide(true);
-      };
+  useEffect(() => {
+    resetState();
+  }, [selectedProduct]);
+
+  useEffect(() => {
+    if (selectedProduct) {
+      const stock =
+        selectedProduct?.product_variant?.reduce(
+          (acc, item) => acc + item.stock,
+          0
+        ) || 0;
+      setStock(stock);
+    }
+  }, [selectedProduct, activeSize]);
+
+  // Ambil daftar color unik
+  const uniqueColors = Array.from(
+    new Set(
+      selectedProduct?.product_variant.map((item) => item.color).filter(Boolean)
+    )
+  );
+
+  // Ambil daftar size unik berdasarkan color yang dipilih
+  const uniqueSizes = Array.from(
+    new Set(
+      selectedProduct?.product_variant
+        .filter((item) => (activeColor ? item.color === activeColor : true))
+        .map((item) => item.size)
+        .filter(Boolean)
+    )
+  );
+
+  // Handle perubahan pada color
+  const handleActiveColor = (color: string) => {
+    setActiveColor(color);
+    setActiveSize(null); // Reset size saat color berubah
+  };
+
+  // Handle perubahan pada size
+  const handleActiveSize = (size: string) => {
+    setActiveSize(size);
+  };
+
+  const handleAddToCart = (item) => {
+    console.log({ item });
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity((prevQuantity) => {
+      if (prevQuantity < stock) {
+        return prevQuantity + 1;
+      }
+      return prevQuantity; // Tetap pada nilai sebelumnya jika sudah 20
+    });
+  };
+  const handleDecreaseQuantity = () =>
+    setQuantity((prevQuiantity) => Math.max(prevQuiantity - 1, 1));
 
   return (
     <>
@@ -41,21 +109,25 @@ const ModalQuickview = () => {
           <div className="flex h-full max-md:flex-col-reverse gap-y-6">
             <div className="left lg:w-[388px] md:w-[300px] flex-shrink-0 px-6">
               <div className="list-img max-md:flex items-center gap-4">
-                {selectedProduct?.product_variant?.map((item, index) => (
-                  <div
-                    className="bg-img w-full aspect-[3/4] max-md:w-[150px] max-md:flex-shrink-0 rounded-[20px] overflow-hidden md:mt-6"
-                    key={index}
-                  >
-                    <Image
-                      src={item}
-                      width={1500}
-                      height={2000}
-                      alt={item}
-                      priority={true}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
+                {productImgs &&
+                  productImgs.map(
+                    (item, index) =>
+                      item && (
+                        <div
+                          className="bg-img w-full aspect-[3/4] max-md:w-[150px] max-md:flex-shrink-0 rounded-[20px] overflow-hidden md:mt-6"
+                          key={index}
+                        >
+                          <Image
+                            src={`${BASE_URL}/${item}`}
+                            width={1500}
+                            height={2000}
+                            alt="Gambar Produk"
+                            priority={true}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )
+                  )}
               </div>
             </div>
             <div className="right w-full px-4">
@@ -133,29 +205,32 @@ const ModalQuickview = () => {
                       <span className="text-title color">{activeColor}</span>
                     </div>
                     <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                      {selectedProduct?.variation.map((item, index) => (
-                        <div
-                          className={`color-item w-12 h-12 rounded-xl duration-300 relative ${
-                            activeColor === item.color ? "active" : ""
-                          }`}
-                          key={index}
-                          datatype={item.image}
-                          onClick={() => {
-                            handleActiveColor(item.color);
-                          }}
-                        >
-                          <Image
-                            src={item.colorImage}
-                            width={100}
-                            height={100}
-                            alt="color"
-                            className="rounded-xl"
+                      <div className="right flex items-center gap-3">
+                        <div className="select-block relative">
+                          <select
+                            id="select-filter"
+                            name="select-filter"
+                            className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
+                            onChange={(e) => {
+                              handleActiveColor(e.target.value);
+                            }}
+                            defaultValue={"Warna"}
+                          >
+                            <option value="Warna" disabled>
+                              Warna
+                            </option>
+                            {uniqueColors.map((item, index) => (
+                              <option value={item} key={index}>
+                                {item}
+                              </option>
+                            ))}
+                          </select>
+                          <Icon.CaretDown
+                            size={12}
+                            className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
                           />
-                          <div className="tag-action bg-black text-white caption2 capitalize px-1.5 py-0.5 rounded-sm">
-                            {item.color}
-                          </div>
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
                   <div className="choose-size mt-5">
@@ -164,30 +239,19 @@ const ModalQuickview = () => {
                         Size:{" "}
                         <span className="text-title size">{activeSize}</span>
                       </div>
-                      <div
-                        className="caption1 size-guide text-red underline cursor-pointer"
-                        onClick={handleOpenSizeGuide}
-                      >
-                        Size Guide
-                      </div>
-                      <ModalSizeguide
-                        data={selectedProduct}
-                        isOpen={openSizeGuide}
-                        onClose={handleCloseSizeGuide}
-                      />
                     </div>
                     <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                      {selectedProduct?.sizes.map((item, index) => (
+                      {uniqueSizes.map((size, index) => (
                         <div
                           className={`size-item ${
-                            item === "freesize" ? "px-3 py-2" : "w-12 h-12"
+                            size === "freesize" ? "px-3 py-2" : "w-12 h-12"
                           } flex items-center justify-center text-button rounded-full bg-white border border-line ${
-                            activeSize === item ? "active" : ""
+                            activeSize === size ? "active" : ""
                           }`}
                           key={index}
-                          onClick={() => handleActiveSize(item)}
+                          onClick={() => handleActiveSize(size)}
                         >
-                          {item}
+                          {size}
                         </div>
                       ))}
                     </div>
@@ -203,9 +267,7 @@ const ModalQuickview = () => {
                             : ""
                         } cursor-pointer body1`}
                       />
-                      <div className="body1 font-semibold">
-                        {selectedProduct?.quantityPurchase}
-                      </div>
+                      <div className="body1 font-semibold">{quantity}</div>
                       <Icon.Plus
                         onClick={handleIncreaseQuantity}
                         className="cursor-pointer body1"
@@ -223,125 +285,19 @@ const ModalQuickview = () => {
                       Buy It Now
                     </div>
                   </div>
-                  <div className="flex items-center flex-wrap lg:gap-20 gap-8 gap-y-4 mt-5">
-                    <div
-                      className="compare flex items-center gap-3 cursor-pointer"
-                      onClick={handleAddToCompare}
-                    >
-                      <div className="compare-btn md:w-12 md:h-12 w-10 h-10 flex items-center justify-center border border-line cursor-pointer rounded-xl duration-300 hover:bg-black hover:text-white">
-                        <Icon.ArrowsCounterClockwise className="heading6" />
-                      </div>
-                      <span>Compare</span>
-                    </div>
-                    <div className="share flex items-center gap-3 cursor-pointer">
-                      <div className="share-btn md:w-12 md:h-12 w-10 h-10 flex items-center justify-center border border-line cursor-pointer rounded-xl duration-300 hover:bg-black hover:text-white">
-                        <Icon.ShareNetwork weight="fill" className="heading6" />
-                      </div>
-                      <span>Share Products</span>
-                    </div>
-                  </div>
                   <div className="more-infor mt-6">
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <div className="flex items-center gap-1">
-                        <Icon.ArrowClockwise className="body1" />
-                        <div className="text-title">Delivery & Return</div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Icon.Question className="body1" />
-                        <div className="text-title">Ask A Question</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-1 mt-3">
-                      <Icon.Timer className="body1" />
-                      <span className="text-title">Estimated Delivery:</span>
-                      <span className="text-secondary">
-                        14 January - 18 January
-                      </span>
-                    </div>
-                    <div className="flex items-center flex-wrap gap-1 mt-3">
-                      <Icon.Eye className="body1" />
-                      <span className="text-title">38</span>
-                      <span className="text-secondary">
-                        people viewing this product right now!
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 mt-3">
-                      <div className="text-title">SKU:</div>
-                      <div className="text-secondary">53453412</div>
-                    </div>
                     <div className="flex items-center gap-1 mt-3">
                       <div className="text-title">Categories:</div>
                       <div className="text-secondary">
-                        {selectedProduct?.category}, {selectedProduct?.gender}
+                        kategori
+                        {/* {selectedProduct?.category}, {selectedProduct?.gender} */}
                       </div>
                     </div>
                     <div className="flex items-center gap-1 mt-3">
                       <div className="text-title">Tag:</div>
                       <div className="text-secondary">
-                        {selectedProduct?.type}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="list-payment mt-7">
-                    <div className="main-content lg:pt-8 pt-6 lg:pb-6 pb-4 sm:px-4 px-3 border border-line rounded-xl relative max-md:w-2/3 max-sm:w-full">
-                      <div className="heading6 px-5 bg-white absolute -top-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap">
-                        Guranteed safe checkout
-                      </div>
-                      <div className="list grid grid-cols-6">
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-0.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-1.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-2.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-3.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-4.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
-                        <div className="item flex items-center justify-center lg:px-3 px-1">
-                          <Image
-                            src={"/images/payment/Frame-5.png"}
-                            width={500}
-                            height={450}
-                            alt="payment"
-                            className="w-full"
-                          />
-                        </div>
+                        tipe
+                        {/* {selectedProduct?.type} */}
                       </div>
                     </div>
                   </div>

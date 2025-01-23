@@ -44,8 +44,8 @@ const setAdminMenus = async () => {
     },
     {
       name: "Produk",
-      href: createUrl("/products/lists"),
       icon: <BsBook />,
+      href: createUrl("/products/lists"),
     },
     {
       name: "Pesanan",

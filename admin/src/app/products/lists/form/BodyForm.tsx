@@ -1,6 +1,8 @@
 /** @format */
 "use client";
+import InputRupiah from "@/components/input/InputRupiah";
 import InputTextDefault from "@/components/input/InputTextDefault";
+import InputToggle from "@/components/input/InputToggle";
 import SelectFromDb from "@/components/select/SelectFromDB";
 import useSubCategories from "@/stores/crud/SubCategories";
 import ProductsTypes from "@/types/Products";
@@ -19,8 +21,8 @@ type Props = {
   errors: FieldErrors<ProductsTypes>;
   dtEdit: ProductsTypes | null;
   control: unknown;
-  watch: unknown;
-  setValue: unknown;
+  watch: any;
+  setValue: any;
   showModal: boolean;
 };
 const BodyForm: FC<Props> = ({
@@ -30,6 +32,7 @@ const BodyForm: FC<Props> = ({
   control,
   dtEdit,
   setValue,
+  watch,
 }) => {
   // store
   const { setSubCategories, dtSubCategories } = useSubCategories();
@@ -46,6 +49,15 @@ const BodyForm: FC<Props> = ({
   useEffect(() => {
     fetchSubCategories();
   }, [showModal]);
+
+  const hasVariants = watch("has_variants");
+
+  useEffect(() => {
+    if (hasVariants) {
+      setValue("stock", "");
+      setValue("price", "");
+    }
+  }, [hasVariants, setValue]);
 
   return (
     <>
@@ -80,6 +92,39 @@ const BodyForm: FC<Props> = ({
         initialValue={dtEdit?.product_desc || ""}
         setValue={setValue}
       />
+      <InputToggle
+        label="Memiliki Varian"
+        name="has_variants"
+        register={register}
+        errors={errors.has_variants}
+        defaultChecked={false}
+        addClass="col-span-8"
+      />
+
+      {/* Non-variant Product Details */}
+      {!hasVariants && (
+        <>
+          <InputTextDefault
+            label="Stock"
+            name="stock"
+            register={register}
+            errors={errors.stock}
+            required
+            type="number"
+            min={1}
+            addClass="col-span-8 lg:col-span-2"
+          />
+          <InputRupiah
+            label="Harga"
+            control={control}
+            name="price"
+            errors={errors.price}
+            addClass="col-span-8  lg:col-span-6"
+            required
+            minLength={1}
+          />
+        </>
+      )}
     </>
   );
 };

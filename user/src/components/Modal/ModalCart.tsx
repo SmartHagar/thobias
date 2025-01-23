@@ -6,11 +6,10 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import productData from "@/data/Product.json";
-import { ProductType } from "@/type/ProductsType";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import { countdownTime } from "@/store/countdownTime";
 import CountdownTimeType from "@/type/CountdownType";
+import ProductsTypes from "@/type/ProductsType";
 
 const ModalCart = ({
   serverTimeLeft,
@@ -30,7 +29,7 @@ const ModalCart = ({
   const [activeTab, setActiveTab] = useState<string | undefined>("");
   const { isModalOpen, closeModalCart } = useModalCartContext();
 
-  const handleAddToCart = (productItem: ProductType) => {
+  const handleAddToCart = (productItem: ProductsTypes) => {
     console.log({ productItem });
   };
 
@@ -57,7 +56,7 @@ const ModalCart = ({
           <div className="left w-1/2 border-r border-line py-6 max-md:hidden">
             <div className="heading5 px-6 pb-3">You May Also Like</div>
             <div className="list px-6">
-              {productData.slice(0, 4).map((product) => (
+              {/* {productData.slice(0, 4).map((product) => (
                 <div
                   key={product.id}
                   className="item py-5 flex items-center justify-between gap-3 border-b border-line"
@@ -94,7 +93,7 @@ const ModalCart = ({
                     <Icon.Handbag />
                   </div>
                 </div>
-              ))}
+              ))} */}
             </div>
           </div>
           <div className="right cart-block md:w-1/2 w-full py-6 relative overflow-hidden">

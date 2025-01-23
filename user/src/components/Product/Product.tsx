@@ -6,7 +6,7 @@ import React from "react";
 import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalCartContext } from "@/context/ModalCartContext";
-import { useModalWishlistContext } from "@/context/ModalWishlistContext";
+// import { useModalWishlistContext } from "@/context/ModalWishlistContext";
 import { useModalQuickviewContext } from "@/context/ModalQuickviewContext";
 import { useRouter } from "next/navigation";
 import ProductsTypes from "@/type/ProductsType";
@@ -21,21 +21,24 @@ interface ProductProps {
 
 const Product: React.FC<ProductProps> = ({ data, style }) => {
   const { openModalCart } = useModalCartContext();
-  const { openModalWishlist } = useModalWishlistContext();
+  // const { openModalWishlist } = useModalWishlistContext();
   const { openQuickview } = useModalQuickviewContext();
   const router = useRouter();
 
-  const imgProduk = data?.product_variant?.[0]?.product_image.find(
-    (item) => item.is_main
-  )?.product_img;
+  const imgProduk =
+    data?.product_image?.find((item) => item.is_main)?.product_img ??
+    data?.product_variant?.[0]?.variant_img ??
+    "";
 
   const handleAddToCart = () => {
     openModalCart();
   };
 
-  const handleAddToWishlist = () => {
-    openModalWishlist();
-  };
+  const price = data?.product_variant?.[0]?.price || 0;
+
+  // const handleAddToWishlist = () => {
+  //   openModalWishlist();
+  // };
 
   const handleQuickviewOpen = () => {
     openQuickview(data);
@@ -46,7 +49,7 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
     router.push(`/product/default?id=${productId}`);
   };
 
-  const percentSold = Math.floor(55);
+  const percentSold = Math.floor(100);
 
   return (
     <div className={`product-item grid-type ${style}`}>
@@ -96,7 +99,9 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
           {/* image product */}
           <div className="product-img w-full h-full aspect-[3/4]">
             <Image
-              src={`${BASE_URL}/${imgProduk}`}
+              src={`${
+                imgProduk ? BASE_URL + "/" + imgProduk : "/images/logo.png"
+              }`}
               width={500}
               height={500}
               priority={true}
@@ -144,7 +149,10 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
               <div className="text-button-uppercase">
                 <span className="text-secondary2 max-sm:text-xs">Stok: </span>
                 <span className="max-sm:text-xs">
-                  {data?.product_variant?.length}
+                  {data?.product_variant?.reduce(
+                    (acc, item) => acc + item.stock,
+                    0
+                  )}
                 </span>
               </div>
             </div>
@@ -155,7 +163,7 @@ const Product: React.FC<ProductProps> = ({ data, style }) => {
 
           <div className="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
             <div className="product-price text-title bg-green">
-              {showRupiah(data?.product_variant?.[0].price || 0)}
+              {showRupiah(price)}
             </div>
             {/* {percentSale > 0 && (
               <>

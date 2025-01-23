@@ -65,6 +65,7 @@ const Form = ({
   // simpan data
   const onSubmit: SubmitHandler<VariantsTypes> = async (row) => {
     row.product_id = productId;
+    console.log({ row });
     //  submit data
     // console.log({ row });
     // return;

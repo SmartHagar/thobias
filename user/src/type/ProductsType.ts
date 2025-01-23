@@ -1,6 +1,7 @@
 /** @format */
 
 import OrderItemsTypes from "./OrderItemsType";
+import ProductImagesTypes from "./ProductImagesType";
 import ReviewsTypes from "./ReviewsType";
 import SubCategoriesTypes from "./SubCategoriesType";
 import VariantsTypes from "./VariantsType";
@@ -15,4 +16,5 @@ export default interface ProductsTypes {
   review: ReviewsTypes[];
   order_item: OrderItemsTypes[];
   product_variant: VariantsTypes[];
+  product_image: ProductImagesTypes[];
 }

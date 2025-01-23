@@ -4,19 +4,18 @@
 
 import React, { useState, useEffect } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
-import { usePathname } from "next/navigation";
-import productData from "@/data/Product.json";
+// import { usePathname } from "next/navigation";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import { useModalWishlistContext } from "@/context/ModalWishlistContext";
 import { useRouter } from "next/navigation";
-import ListMenu from "./NavbarMenu";
+// import ListMenu from "./NavbarMenu";
 
 interface Props {
   props: string;
 }
 
 const MenuFour: React.FC<Props> = ({ props }) => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const { openModalCart } = useModalCartContext();
   const { openModalWishlist } = useModalWishlistContext();
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -78,7 +77,7 @@ const MenuFour: React.FC<Props> = ({ props }) => {
 
             <div></div>
             {/* listmenu */}
-            <ListMenu productData={productData} pathname={pathname} />
+            {/* <ListMenu productData={productData} pathname={pathname} /> */}
 
             <div className="right flex gap-12 z-[1]">
               <div className="list-action flex items-center gap-4">

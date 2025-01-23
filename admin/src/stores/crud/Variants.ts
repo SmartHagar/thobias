@@ -116,7 +116,9 @@ const useVariants = create(
         const response = await crud({
           method: "get",
           url: `/productVariants/${id}`,
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         set((state) => ({
           ...state,
@@ -141,6 +143,7 @@ const useVariants = create(
           url: `/productVariants`,
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
           data: row,
         });
@@ -194,9 +197,12 @@ const useVariants = create(
       try {
         const token = await useLogin.getState().setToken();
         const response = await crud({
-          method: "PUT",
-          url: `/productVariants/${id}`,
-          headers: { Authorization: `Bearer ${token}` },
+          method: "POST",
+          url: `/productVariants/${id}?_method=PUT`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
           data: row,
         });
         set((prevState) => ({

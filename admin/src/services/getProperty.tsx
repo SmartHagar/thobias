@@ -124,9 +124,6 @@ const getProperty = (obj: any, prop: any, index: number, setIndexBox: any) => {
     if (prop === "is_main") {
       return obj ? "Ya" : "Tidak";
     }
-    if (prop === "color") {
-      return <div style={{ backgroundColor: obj }} className="w-8 h-8"></div>;
-    }
     return <p className="capitalize">{obj}</p>;
   } else {
     // eslint-disable-next-line no-throw-literal

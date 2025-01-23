@@ -8,6 +8,7 @@ import _ from "lodash";
 import useProducts from "@/stores/crud/Products";
 import ProductsTypes from "@/types/Products";
 import { BsImage } from "react-icons/bs";
+import toastShow from "@/utils/toast-show";
 
 type DeleteProps = {
   id?: number | string;
@@ -65,6 +66,8 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
     "Kategori",
     "Sub Kategori",
     "Nama",
+    "Stok",
+    "Harga",
     "Deskripsi",
     "Aksi",
   ];
@@ -72,13 +75,21 @@ const ShowData: FC<Props> = ({ setDelete, setEdit }) => {
     "sub_category.category.category_nm",
     "sub_category.sub_category_nm",
     "product_nm",
+    "stock",
+    "price",
     "product_desc",
   ];
 
   const gotTo = (href: string) => router.push(href);
 
   const onClickTR = (row: ProductsTypes) => {
-    gotTo(`/products/variants?product_id=${row.id}`);
+    if (row.has_variants) {
+      gotTo(`/products/variants?product_id=${row.id}`);
+    } else {
+      toastShow({
+        event: { type: "error", message: "Produk tidak memiliki varian" },
+      });
+    }
   };
 
   const costume = (row: ProductsTypes) => {
