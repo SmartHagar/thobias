@@ -11,7 +11,8 @@ import { BASE_URL } from "@/services/baseURL";
 import toastShow from "@/utils/toast-show";
 import { Toaster } from "react-hot-toast";
 import showRupiah from "@/services/rupiah";
-import addToCart from "@/utils/addToCart";
+import useCartsApi from "@/store/api/Carts";
+import useLogin from "@/store/auth/login";
 
 const ModalQuickview = () => {
   // state
@@ -20,6 +21,9 @@ const ModalQuickview = () => {
   const [quantity, setQuantity] = useState(1);
   // context
   const { selectedProduct, closeQuickview } = useModalQuickviewContext();
+  // store
+  const { addCart } = useCartsApi();
+  const { setToken } = useLogin();
 
   // productImg
   const productImgs = [
@@ -70,6 +74,7 @@ const ModalQuickview = () => {
       return {
         id: selectedProduct?.id,
         product_id: selectedProduct?.id,
+        product_variant_id: null,
         price: selectedProduct?.price,
         stock: selectedProduct?.stock,
       };
@@ -114,9 +119,19 @@ const ModalQuickview = () => {
     findSelectedVariant();
   };
 
-  const selectedVariantOrProduct = findSelectedVariant();
+  // setActiveSize and setActiveColor if uniqueColors or uniqueSizes not empty
+  useEffect(() => {
+    if (uniqueColors.length > 0) {
+      setActiveColor(uniqueColors[0]);
+    }
+    if (uniqueSizes.length > 0) {
+      setActiveSize(uniqueSizes[0]);
+    }
+  }, [uniqueColors, uniqueSizes]);
 
-  const handleAddToCart = () => {
+  const selectedVariantOrProduct = findSelectedVariant();
+  // add to cart
+  const handleAddToCart = async () => {
     if (!selectedVariantOrProduct) {
       return toastShow({
         event: {
@@ -125,9 +140,21 @@ const ModalQuickview = () => {
         },
       });
     }
-    if (selectedVariantOrProduct) {
-      addToCart(selectedVariantOrProduct as any);
+    // cek login
+    const token = await setToken();
+    if (token) {
+      return addCart({
+        product_id: selectedVariantOrProduct?.product_id,
+        product_variant_id: selectedVariantOrProduct?.product_variant_id,
+        quantity,
+      });
     }
+    return toastShow({
+      event: {
+        type: "error",
+        message: "Silahkan login terlebih dahulu",
+      },
+    });
   };
 
   const handleIncreaseQuantity = () => {
@@ -137,7 +164,7 @@ const ModalQuickview = () => {
         if (prevQuantity < stock) {
           return prevQuantity + 1;
         }
-        return prevQuantity; // Tetap pada nilai sebelumnya jika sudah 20
+        return prevQuantity; // Tetap pada nilai sebelumnya jika stock habis
       });
     } else {
       toastShow({
@@ -150,8 +177,6 @@ const ModalQuickview = () => {
   };
   const handleDecreaseQuantity = () =>
     setQuantity((prevQuiantity) => Math.max(prevQuiantity - 1, 1));
-
-  console.log({ selectedVariantOrProduct });
 
   return (
     <>

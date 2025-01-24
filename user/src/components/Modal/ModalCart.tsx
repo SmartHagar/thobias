@@ -2,36 +2,31 @@
 
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalCartContext } from "@/context/ModalCartContext";
-import { countdownTime } from "@/store/countdownTime";
-import CountdownTimeType from "@/type/CountdownType";
-import ProductsTypes from "@/type/ProductsType";
+import useCartsApi from "@/store/api/Carts";
+import useLogin from "@/store/auth/login";
 
-const ModalCart = ({
-  serverTimeLeft,
-}: {
-  serverTimeLeft: CountdownTimeType;
-}) => {
-  const [timeLeft, setTimeLeft] = useState(serverTimeLeft);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(countdownTime());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
+const ModalCart = () => {
   const [activeTab, setActiveTab] = useState<string | undefined>("");
   const { isModalOpen, closeModalCart } = useModalCartContext();
+  // store
+  const { setCarts, dtCarts } = useCartsApi();
+  const { setToken } = useLogin();
+  // get data cart
+  const getDtCarts = useCallback(async () => {
+    const token = await setToken();
+    setCarts(token);
+  }, [setCarts, setToken]);
+  // get data cart
+  useEffect(() => {
+    getDtCarts();
+    return () => {};
+  }, [getDtCarts]);
 
-  const handleAddToCart = (productItem: ProductsTypes) => {
-    console.log({ productItem });
-  };
+  console.log({ dtCarts });
 
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab);
@@ -104,23 +99,6 @@ const ModalCart = ({
                 onClick={closeModalCart}
               >
                 <Icon.X size={14} />
-              </div>
-            </div>
-            <div className="time px-6">
-              <div className=" flex items-center gap-3 px-5 py-3 bg-green rounded-lg">
-                <p className="text-3xl">🔥</p>
-                <div className="caption1">
-                  Your cart will expire in{" "}
-                  <span className="text-red caption1 font-semibold">
-                    {timeLeft.minutes}:
-                    {timeLeft.seconds < 10
-                      ? `0${timeLeft.seconds}`
-                      : timeLeft.seconds}
-                  </span>{" "}
-                  minutes!
-                  <br />
-                  Please checkout now before your items sell out!
-                </div>
               </div>
             </div>
             {/* <div className="heading banner mt-3 px-6">
