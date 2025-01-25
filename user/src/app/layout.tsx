@@ -8,17 +8,13 @@ import ModalWishlist from "@/components/Modal/ModalWishlist";
 import ModalSearch from "@/components/Modal/ModalSearch";
 import ModalQuickview from "@/components/Modal/ModalQuickview";
 import ModalCompare from "@/components/Modal/ModalCompare";
-import CountdownTimeType from "@/type/CountdownType";
-import { countdownTime } from "@/store/countdownTime";
 import Menu from "@/components/Footer/Menu";
 import TopNavThree from "@/components/Header/TopNav/TopNavThree";
 import MenuFour from "@/components/Header/Menu/MenuFour";
 
-const serverTimeLeft: CountdownTimeType = countdownTime();
-
 export const metadata: Metadata = {
   title: "WWF",
-  description: "Multipurpose eCommerce Template",
+  description: "Create by Thobias",
 };
 
 export default function RootLayout({
@@ -38,7 +34,7 @@ export default function RootLayout({
             {children}
           </div>
           <Menu />
-          <ModalCart serverTimeLeft={serverTimeLeft} />
+          <ModalCart />
           <ModalWishlist />
           <ModalSearch />
           <ModalQuickview />

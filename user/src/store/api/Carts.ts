@@ -10,6 +10,7 @@ import { devtools } from "zustand/middleware";
 import { api } from "@/services/baseURL";
 // import useLogin from "../auth/login";
 import CartsTypes from "@/type/CartsType";
+import useLogin from "../auth/login";
 // api carts
 type Props = {
   product_variant_id?: string | null;
@@ -17,6 +18,7 @@ type Props = {
   quantity?: number;
   user_id?: string;
   costumQuantity?: boolean;
+  id?: string;
 };
 
 type Store = {
@@ -43,7 +45,19 @@ type Store = {
     error?: {};
   }>;
 
-  removeCarts: ({ user_id, product_variant_id }: Props) => Promise<{
+  costumeQuantity: ({
+    product_variant_id,
+    product_id,
+    quantity,
+    costumQuantity,
+    user_id,
+  }: Props) => Promise<{
+    status: string;
+    data?: {};
+    error?: {};
+  }>;
+
+  removeCarts: ({ user_id, id }: Props) => Promise<{
     status: string;
     data?: {};
     error?: {};
@@ -51,8 +65,7 @@ type Store = {
 };
 
 const token = async () => {
-  // return await useLogin.getState().setToken();
-  return "token";
+  return await useLogin.getState().setToken();
 };
 
 const useCartsApi = create(
@@ -68,9 +81,7 @@ const useCartsApi = create(
           method: "get",
           url: `/carts`,
           headers: { Authorization: `Bearer ${await token()}` },
-          params: {
-            user_id,
-          },
+          params: { user_id },
         });
         set((state) => ({ ...state, dtCarts: response.data }));
         return {
@@ -115,18 +126,49 @@ const useCartsApi = create(
         };
       }
     },
-    removeCarts: async ({ user_id, product_variant_id }) => {
+    costumeQuantity: async ({
+      product_id,
+      product_variant_id,
+      quantity = 1,
+      user_id,
+    }) => {
+      const row = {
+        product_id,
+        product_variant_id,
+        quantity,
+      };
       try {
         const response = await api({
-          method: "post",
-          url: `/carts/removeFromCartDatabase`,
+          method: "POST",
+          url: `/carts/costumeQuantity`,
+          headers: { Authorization: `Bearer ${await token()}` },
+          params: row,
+        });
+        // call set cart
+        useCartsApi.getState().setCarts({ user_id });
+        return {
+          status: "berhasil",
+          data: response.data,
+        };
+      } catch (error: any) {
+        return {
+          status: "error",
+          error: error.response.data,
+        };
+      }
+    },
+    removeCarts: async ({ user_id, id }) => {
+      try {
+        const response = await api({
+          method: "delete",
+          url: `/carts`,
           headers: {
             "X-Requested-With": "XMLHttpRequest",
             Authorization: `Bearer ${await token()}`,
           },
           params: {
             user_id,
-            product_variant_id,
+            id,
           },
         });
         //   call set cart

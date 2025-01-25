@@ -8,7 +8,9 @@ import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import { useModalWishlistContext } from "@/context/ModalWishlistContext";
 import { useRouter } from "next/navigation";
+import useCartsApi from "@/store/api/Carts";
 // import ListMenu from "./NavbarMenu";
+import Cookies from "js-cookie";
 
 interface Props {
   props: string;
@@ -19,7 +21,26 @@ const MenuFour: React.FC<Props> = ({ props }) => {
   const { openModalCart } = useModalCartContext();
   const { openModalWishlist } = useModalWishlistContext();
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [countQuantity, setCountQuantity] = useState(0);
+  // store
+  const { setCarts, dtCarts } = useCartsApi();
+  // cookies
+  const user = Cookies.get("user") ? JSON.parse(Cookies.get("user") || "") : "";
+  // get data cart
+  useEffect(() => {
+    setCarts({ user_id: user.id });
+
+    return () => {};
+  }, []);
+  // count quantity
+  useEffect(() => {
+    let count = 0;
+    dtCarts.data.map((item) => (count += item.quantity));
+    setCountQuantity(count);
+  }, [dtCarts]);
   const router = useRouter();
+
+  console.log({ dtCarts });
 
   const handleSearch = (value: string) => {
     router.push(`/search-result?query=${value}`);
@@ -93,7 +114,7 @@ const MenuFour: React.FC<Props> = ({ props }) => {
                 >
                   <Icon.Handbag size={24} color="black" />
                   <span className="quantity cart-quantity absolute -right-1.5 -top-1.5 text-xs text-white bg-black w-4 h-4 flex items-center justify-center rounded-full">
-                    {/* {cartState.cartArray.length} */}
+                    {countQuantity}
                   </span>
                 </div>
               </div>

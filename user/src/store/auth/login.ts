@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { auth } from "@/services/baseURL";
 import Cookies from "js-cookie";
-import { User } from "@/types";
+import { User } from "@/type";
 
 // type data login
 interface dataLogin {
@@ -38,6 +38,8 @@ const useLogin = create(
           url: `/login`,
           data,
         });
+        // call cekToken
+        get().cekToken();
         return {
           status: "success",
           data: response.data,
@@ -56,6 +58,9 @@ const useLogin = create(
           url: `/register`,
           data,
         });
+        // call cekToken
+        get().cekToken();
+
         return {
           status: "success",
           data: response.data,
@@ -75,7 +80,7 @@ const useLogin = create(
           url: `/cek_token`,
           headers: { Authorization: `Bearer ${token}` },
         });
-        set((state) => ({ ...state, dtUser: response.data?.user }));
+        set((state) => ({ ...state, dtUser: response.data }));
         return {
           status: "success",
           data: response.data,

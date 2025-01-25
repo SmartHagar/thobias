@@ -11,8 +11,7 @@ import { BASE_URL } from "@/services/baseURL";
 import toastShow from "@/utils/toast-show";
 import { Toaster } from "react-hot-toast";
 import showRupiah from "@/services/rupiah";
-import useCartsApi from "@/store/api/Carts";
-import useLogin from "@/store/auth/login";
+import AddToCart from "@/utils/AddToCart";
 
 const ModalQuickview = () => {
   // state
@@ -21,9 +20,6 @@ const ModalQuickview = () => {
   const [quantity, setQuantity] = useState(1);
   // context
   const { selectedProduct, closeQuickview } = useModalQuickviewContext();
-  // store
-  const { addCart } = useCartsApi();
-  const { setToken } = useLogin();
 
   // productImg
   const productImgs = [
@@ -130,32 +126,6 @@ const ModalQuickview = () => {
   }, [uniqueColors, uniqueSizes]);
 
   const selectedVariantOrProduct = findSelectedVariant();
-  // add to cart
-  const handleAddToCart = async () => {
-    if (!selectedVariantOrProduct) {
-      return toastShow({
-        event: {
-          type: "error",
-          message: "Pilih ukuran dan warna terlebih dahulu",
-        },
-      });
-    }
-    // cek login
-    const token = await setToken();
-    if (token) {
-      return addCart({
-        product_id: selectedVariantOrProduct?.product_id,
-        product_variant_id: selectedVariantOrProduct?.product_variant_id,
-        quantity,
-      });
-    }
-    return toastShow({
-      event: {
-        type: "error",
-        message: "Silahkan login terlebih dahulu",
-      },
-    });
-  };
 
   const handleIncreaseQuantity = () => {
     if (selectedVariantOrProduct?.stock) {
@@ -354,12 +324,10 @@ const ModalQuickview = () => {
                     {selectedVariantOrProduct?.stock && (
                       <span>Stock: {selectedVariantOrProduct?.stock}</span>
                     )}
-                    <div
-                      onClick={handleAddToCart}
-                      className="button-main w-full text-center bg-white text-black border border-black"
-                    >
-                      Tambahkan Keranjang
-                    </div>
+                    <AddToCart
+                      selectedVariantOrProduct={selectedVariantOrProduct as any}
+                      quantity={quantity}
+                    />
                   </div>
                   <div className="button-block mt-5">
                     <div className="button-main w-full text-center">
