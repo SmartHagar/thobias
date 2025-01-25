@@ -38,8 +38,6 @@ const useLogin = create(
           url: `/login`,
           data,
         });
-        // call cekToken
-        get().cekToken();
         return {
           status: "success",
           data: response.data,

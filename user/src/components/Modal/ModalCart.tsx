@@ -3,7 +3,6 @@
 "use client";
 
 import React, { useEffect, useCallback, useState } from "react";
-import Link from "next/link";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import { useModalCartContext } from "@/context/ModalCartContext";
 import useCartsApi from "@/store/api/Carts";
@@ -12,6 +11,7 @@ import Image from "next/image";
 import { BASE_URL } from "@/services/baseURL";
 import showRupiah from "@/services/rupiah";
 import CartsTypes from "@/type/CartsType";
+import Checkout from "@/utils/Checkout";
 
 const ModalCart = () => {
   const { isModalOpen, closeModalCart } = useModalCartContext();
@@ -180,15 +180,12 @@ const ModalCart = () => {
                 <div className="heading5">{showRupiah(subTotal)}</div>
               </div>
               <div className="block-button text-center p-6">
-                <div className="flex items-center gap-4">
-                  <Link
-                    href={"/checkout"}
-                    className="button-main w-full text-center uppercase"
-                    onClick={closeModalCart}
-                  >
-                    Check Out
-                  </Link>
-                </div>
+                {dtCarts.data.length > 0 && (
+                  <Checkout
+                    closeModalCart={closeModalCart}
+                    user_id={dtCarts?.data?.[0]?.user_id}
+                  />
+                )}
                 <div
                   onClick={closeModalCart}
                   className="text-button-uppercase mt-4 text-center has-line-before cursor-pointer inline-block"

@@ -15,7 +15,7 @@ type Props = {
 };
 
 const AddToCart = ({ selectedVariantOrProduct, quantity }: Props) => {
-  const { setToken } = useLogin();
+  const { cekToken } = useLogin();
   const { addCart } = useCartsApi();
   const handleAddToCart = async () => {
     if (!selectedVariantOrProduct) {
@@ -27,29 +27,30 @@ const AddToCart = ({ selectedVariantOrProduct, quantity }: Props) => {
       });
     }
     // cek login
-    const token = await setToken();
-    if (token) {
-      const res = await addCart({
-        product_id: selectedVariantOrProduct?.product_id,
-        product_variant_id: selectedVariantOrProduct?.product_variant_id,
-        quantity,
+    const token = await cekToken();
+    if (token?.error) {
+      return toastShow({
+        event: {
+          type: "error",
+          message: "Silahkan login terlebih dahulu",
+        },
       });
-      if (res.status === "berhasil") {
-        toastShow({
-          event: {
-            type: "success",
-            message: "Berhasil menambahkan ke keranjang",
-          },
-        });
-      }
-      return res;
     }
-    return toastShow({
-      event: {
-        type: "error",
-        message: "Silahkan login terlebih dahulu",
-      },
+
+    const res = await addCart({
+      product_id: selectedVariantOrProduct?.product_id,
+      product_variant_id: selectedVariantOrProduct?.product_variant_id,
+      quantity,
     });
+    if (res.status === "berhasil") {
+      toastShow({
+        event: {
+          type: "success",
+          message: "Berhasil menambahkan ke keranjang",
+        },
+      });
+    }
+    return res;
   };
 
   return (

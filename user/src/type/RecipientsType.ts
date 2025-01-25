@@ -1,13 +1,13 @@
 /** @format */
 
-import ShippingCostsTypes from "./Village";
+import VillageTypes from "./VillageType";
 
 // userInfo
 export default interface UserInfoTypes {
   id: string;
   user_id: string;
-  shipping_cost_id: string;
-  shipping_cost: ShippingCostsTypes;
+  village_id: string;
+  village: VillageTypes;
   nm_user: string;
   phone_number: string;
   address: string;
