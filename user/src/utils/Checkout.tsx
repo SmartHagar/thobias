@@ -20,9 +20,8 @@ const Checkout = ({ closeModalCart, user_id }: Props) => {
     setRecipients({ user_id });
   }, []);
 
-  console.log({ dtRecipients });
   const goToCheckout = () => {
-    if (dtRecipients.length > 0) {
+    if (dtRecipients.data.length > 0) {
       router.push("/checkout");
       closeModalCart();
     } else {
