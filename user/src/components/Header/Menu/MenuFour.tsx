@@ -40,8 +40,6 @@ const MenuFour: React.FC<Props> = ({ props }) => {
   }, [dtCarts]);
   const router = useRouter();
 
-  console.log({ dtCarts });
-
   const handleSearch = (value: string) => {
     router.push(`/search-result?query=${value}`);
     setSearchKeyword("");

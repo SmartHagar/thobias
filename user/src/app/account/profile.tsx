@@ -14,7 +14,6 @@ type Props = {
 };
 
 const Profile = ({ dtUser }: Props) => {
-  console.log({ dtUser });
   const [activeTab, setActiveTab] = useState<string | undefined>("dashboard");
 
   return (
@@ -118,7 +117,7 @@ const Profile = ({ dtUser }: Props) => {
                 activeTab === "address" ? "block" : "hidden"
               }`}
             >
-              <Address />
+              <Address dtUser={dtUser} activeTab={activeTab} />
             </div>
             {/* if setting active */}
             <div

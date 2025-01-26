@@ -1,17 +1,102 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import RecipientsTypes from "@/type/RecipientsType";
+import useVillageApi from "@/store/api/Villages";
+import useRecipientsApi from "@/store/api/Recipients";
+import { User } from "@/type";
+import toastShow from "@/utils/toast-show";
 
-const Address = () => {
+const registerSchema = yup.object().shape({
+  nm_recipient: yup.string().required("Name harus diisi"),
+  phone: yup.string().required("Phone harus diisi"),
+  address: yup.string().required("Address harus diisi"),
+  village_id: yup.string().required("Village harus diisi"),
+});
+
+interface Props {
+  dtUser: {
+    user: User;
+  };
+  activeTab?: string;
+}
+
+const Address = ({ dtUser, activeTab }: Props) => {
+  // state
   const [activeAddress, setActiveAddress] = useState<string | null>("billing");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // store
+  const { setVillageAll, dtVillage } = useVillageApi();
+  const { setRecipients, dtRecipients, addData, updateData } =
+    useRecipientsApi();
+
+  // get village
+  useEffect(() => {
+    if (activeTab === "address") {
+      setVillageAll();
+      setRecipients({
+        user_id: dtUser.user.id,
+      });
+    }
+  }, [activeTab, dtUser.user.id, setRecipients, setVillageAll]);
 
   const handleActiveAddress = (order: string) => {
     setActiveAddress((prevOrder) => (prevOrder === order ? null : order));
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<RecipientsTypes>({
+    resolver: yupResolver(registerSchema) as any,
+    mode: "onChange",
+  });
+
+  useEffect(() => {
+    if (dtRecipients?.data?.[0]) {
+      setValue("nm_recipient", dtRecipients?.data?.[0]?.nm_recipient);
+      setValue("phone", dtRecipients?.data?.[0]?.phone);
+      setValue("address", dtRecipients?.data?.[0]?.address);
+      setValue("village_id", dtRecipients?.data?.[0]?.village_id);
+    }
+  }, [dtRecipients, setValue]);
+
+  const onSubmit: SubmitHandler<RecipientsTypes> = async (row) => {
+    setIsLoading(true);
+    const isUpdate = dtRecipients?.data?.[0]?.id;
+    row.user_id = dtUser.user.id;
+    row.is_active = true;
+    let res;
+    if (!isUpdate) {
+      res = await addData(row);
+    } else {
+      res = await updateData(dtRecipients?.data?.[0]?.id as string, row);
+    }
+    console.log({ res });
+    toastShow({
+      event: {
+        type: res.data.type,
+        message: res.data.message,
+      },
+    });
+    setIsLoading(false);
+  };
+
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="text"
+          defaultValue={dtRecipients?.data?.[0]?.id}
+          name="id"
+          hidden
+        />
         <button
           type="button"
           className={`tab_btn flex items-center justify-between w-full pb-1.5 border-b border-line ${
@@ -19,7 +104,7 @@ const Address = () => {
           }`}
           onClick={() => handleActiveAddress("billing")}
         >
-          <strong className="heading6">Billing address</strong>
+          <strong className="heading6">Form penerima</strong>
           <Icon.CaretDown className="text-2xl ic_down duration-300" />
         </button>
         <div
@@ -30,249 +115,91 @@ const Address = () => {
           <div className="grid sm:grid-cols-2 gap-4 gap-y-5 mt-5">
             <div className="first-name">
               <label htmlFor="billingFirstName" className="caption1 capitalize">
-                First Name <span className="text-red">*</span>
+                Nama<span className="text-red">*</span>
               </label>
               <input
                 className="border-line mt-2 px-4 py-3 w-full rounded-lg"
                 id="billingFirstName"
                 type="text"
-                required
+                defaultValue={dtRecipients?.data?.[0]?.nm_recipient}
+                {...register("nm_recipient", { required: true })}
               />
+              {errors.nm_recipient && (
+                <span className="text-red text-sm">
+                  {errors.nm_recipient.message}
+                </span>
+              )}
             </div>
-            <div className="last-name">
-              <label htmlFor="billingLastName" className="caption1 capitalize">
-                Last Name <span className="text-red">*</span>
+            <div className="">
+              <label htmlFor="select-filter" className="caption1 capitalize">
+                Kecamatan-Kelurahan<span className="text-red">*</span>
               </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingLastName"
-                type="text"
-                required
-              />
+              <div className="select-block relative">
+                <select
+                  id="select-filter"
+                  className="caption1 w-full py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
+                  {...register("village_id", { required: true })}
+                >
+                  <option value="">Pilih Kecamatan-Kelurahan</option>
+                  {dtVillage.map((item, index) => {
+                    return (
+                      <option value={item.id} key={index}>
+                        {item.sub_district.sub_district_nm}-{item.village_nm}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {errors.village_id && (
+                <span className="text-red text-sm">
+                  {errors.village_id.message}
+                </span>
+              )}
             </div>
-            <div className="company">
-              <label htmlFor="billingCompany" className="caption1 capitalize">
-                Company name (optional)
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingCompany"
-                type="text"
-                required
-              />
-            </div>
-            <div className="country">
-              <label htmlFor="billingCountry" className="caption1 capitalize">
-                Country / Region <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingCountry"
-                type="text"
-                required
-              />
-            </div>
-            <div className="street">
-              <label htmlFor="billingStreet" className="caption1 capitalize">
-                street address <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingStreet"
-                type="text"
-                required
-              />
-            </div>
-            <div className="city">
-              <label htmlFor="billingCity" className="caption1 capitalize">
-                Town / city <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingCity"
-                type="text"
-                required
-              />
-            </div>
-            <div className="state">
-              <label htmlFor="billingState" className="caption1 capitalize">
-                state <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingState"
-                type="text"
-                required
-              />
-            </div>
-            <div className="zip">
-              <label htmlFor="billingZip" className="caption1 capitalize">
-                ZIP <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingZip"
-                type="text"
-                required
-              />
-            </div>
+
             <div className="phone">
               <label htmlFor="billingPhone" className="caption1 capitalize">
-                Phone <span className="text-red">*</span>
+                No. HP <span className="text-red">*</span>
               </label>
               <input
                 className="border-line mt-2 px-4 py-3 w-full rounded-lg"
                 id="billingPhone"
                 type="text"
-                required
+                defaultValue={dtRecipients?.data?.[0]?.phone || ""}
+                {...register("phone", { required: true })}
               />
+              {errors.phone && (
+                <span className="text-red text-sm">{errors.phone.message}</span>
+              )}
             </div>
-            <div className="email">
-              <label htmlFor="billingEmail" className="caption1 capitalize">
-                Email <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="billingEmail"
-                type="email"
-                required
-              />
-            </div>
-          </div>
-        </div>
-        <button
-          type="button"
-          className={`tab_btn flex items-center justify-between w-full mt-10 pb-1.5 border-b border-line ${
-            activeAddress === "shipping" ? "active" : ""
-          }`}
-          onClick={() => handleActiveAddress("shipping")}
-        >
-          <strong className="heading6">Shipping address</strong>
-          <Icon.CaretDown className="text-2xl ic_down duration-300" />
-        </button>
-        <div
-          className={`form_address ${
-            activeAddress === "shipping" ? "block" : "hidden"
-          }`}
-        >
-          <div className="grid sm:grid-cols-2 gap-4 gap-y-5 mt-5">
-            <div className="first-name">
-              <label
-                htmlFor="shippingFirstName"
-                className="caption1 capitalize"
-              >
-                First Name <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingFirstName"
-                type="text"
-                required
-              />
-            </div>
-            <div className="last-name">
-              <label htmlFor="shippingLastName" className="caption1 capitalize">
-                Last Name <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingLastName"
-                type="text"
-                required
-              />
-            </div>
-            <div className="company">
-              <label htmlFor="shippingCompany" className="caption1 capitalize">
-                Company name (optional)
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingCompany"
-                type="text"
-                required
-              />
-            </div>
-            <div className="country">
-              <label htmlFor="shippingCountry" className="caption1 capitalize">
-                Country / Region <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingCountry"
-                type="text"
-                required
-              />
-            </div>
+
             <div className="street">
-              <label htmlFor="shippingStreet" className="caption1 capitalize">
-                street address <span className="text-red">*</span>
+              <label htmlFor="billingStreet" className="caption1 capitalize">
+                Alamat Lengkap <span className="text-red">*</span>
               </label>
               <input
                 className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingStreet"
+                id="billingStreet"
                 type="text"
-                required
+                defaultValue={dtRecipients?.data?.[0]?.address || ""}
+                {...register("address", { required: true })}
               />
-            </div>
-            <div className="city">
-              <label htmlFor="shippingCity" className="caption1 capitalize">
-                Town / city <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingCity"
-                type="text"
-                required
-              />
-            </div>
-            <div className="state">
-              <label htmlFor="shippingState" className="caption1 capitalize">
-                state <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingState"
-                type="text"
-                required
-              />
-            </div>
-            <div className="zip">
-              <label htmlFor="shippingZip" className="caption1 capitalize">
-                ZIP <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingZip"
-                type="text"
-                required
-              />
-            </div>
-            <div className="phone">
-              <label htmlFor="shippingPhone" className="caption1 capitalize">
-                Phone <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingPhone"
-                type="text"
-                required
-              />
-            </div>
-            <div className="email">
-              <label htmlFor="shippingEmail" className="caption1 capitalize">
-                Email <span className="text-red">*</span>
-              </label>
-              <input
-                className="border-line mt-2 px-4 py-3 w-full rounded-lg"
-                id="shippingEmail"
-                type="email"
-                required
-              />
+              {errors.address && (
+                <span className="text-red text-sm">
+                  {errors.address.message}
+                </span>
+              )}
             </div>
           </div>
         </div>
         <div className="block-button lg:mt-10 mt-6">
-          <button className="button-main">Update Address</button>
+          {isLoading ? (
+            <span>Loading...</span>
+          ) : (
+            <button className="button-main">
+              {dtRecipients?.data?.[0]?.id ? "Ubah" : "Simpan"}
+            </button>
+          )}
         </div>
       </form>
     </>

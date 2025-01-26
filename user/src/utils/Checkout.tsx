@@ -4,6 +4,8 @@
 import useRecipientsApi from "@/store/api/Recipients";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import toastShow from "./toast-show";
 
 type Props = {
   closeModalCart: () => void;
@@ -24,20 +26,29 @@ const Checkout = ({ closeModalCart, user_id }: Props) => {
       router.push("/checkout");
       closeModalCart();
     } else {
+      toastShow({
+        event: {
+          type: "error",
+          message: "Silahkan tambahkan alamat terlebih dahulu",
+        },
+      });
       router.push("/account");
       closeModalCart();
     }
   };
   return (
-    <div className="flex items-center gap-4">
-      <button
-        type="button"
-        className="button-main w-full text-center uppercase"
-        onClick={goToCheckout}
-      >
-        Check Out
-      </button>
-    </div>
+    <>
+      <Toaster />
+      <div className="flex items-center gap-4">
+        <button
+          type="button"
+          className="button-main w-full text-center uppercase"
+          onClick={goToCheckout}
+        >
+          Check Out
+        </button>
+      </div>
+    </>
   );
 };
 

@@ -2,14 +2,14 @@
 
 import VillageTypes from "./VillageType";
 
-// userInfo
-export default interface UserInfoTypes {
-  id: string;
+// recipients
+export default interface RecipientsTypes {
+  id?: string;
   user_id: string;
   village_id: string;
-  village: VillageTypes;
-  nm_user: string;
-  phone_number: string;
+  village?: VillageTypes;
+  nm_recipient: string;
+  phone: string;
   address: string;
-  is_active: boolean;
+  is_active?: boolean;
 }

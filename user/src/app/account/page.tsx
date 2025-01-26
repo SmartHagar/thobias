@@ -4,6 +4,7 @@ import useLogin from "@/store/auth/login";
 import React, { useEffect, useState } from "react";
 import Profile from "./profile";
 import Login from "./login";
+import { Toaster } from "react-hot-toast";
 
 const Account = () => {
   const { cekToken, dtUser } = useLogin();
@@ -23,6 +24,8 @@ const Account = () => {
 
   return (
     <main>
+      <Toaster />
+
       {dtUser ? (
         <section>
           <Profile dtUser={dtUser} />

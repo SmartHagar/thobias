@@ -72,7 +72,6 @@ const ModalCart = () => {
 
     return () => {};
   }, [dtCarts.data]);
-  console.log({ subTotal });
 
   return (
     <>

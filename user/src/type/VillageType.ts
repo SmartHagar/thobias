@@ -1,6 +1,6 @@
 /** @format */
 
-import SubDistrictsTypes from "./SubDistricts";
+import SubDistrictsTypes from "./SubDistrictsType";
 
 export default interface VillageTypes {
   id: string;
