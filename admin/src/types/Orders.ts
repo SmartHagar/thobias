@@ -3,8 +3,8 @@
 import { User } from ".";
 import OrderItemsTypes from "./OrderItems";
 import ReviewsTypes from "./Reviews";
-import ShippingCostsTypes from "./Village";
 import ShippingStatusesTypes from "./ShippingStatuses";
+import VillageTypes from "./Village";
 
 // orders
 export default interface OrdersTypes {
@@ -15,10 +15,12 @@ export default interface OrdersTypes {
   total_payment: number;
   status: string;
   address: string;
+  phone: string;
   order_items: OrderItemsTypes[];
   snap_token: string;
   created_at: string;
-  shipping_cost: ShippingCostsTypes;
+  shipping_cost: number;
+  village: VillageTypes;
   shipping_status?: ShippingStatusesTypes;
   review: ReviewsTypes[];
   user: User;

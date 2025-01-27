@@ -8,8 +8,10 @@ import Dashboard from "./dashboard";
 import Orders from "./orders";
 import Address from "./address";
 import Settings from "./settings";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useOrdersApi from "@/store/api/Orders";
+import handleLogout from "@/services/logout";
+import useLogout from "@/store/auth/logout";
 
 type Props = {
   dtUser: any;
@@ -18,10 +20,14 @@ type Props = {
 const Profile = ({ dtUser }: Props) => {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab");
+  // state
+  const [loadLogout, setLoadLogout] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string | undefined>("dashboard");
-
+  // route
+  const route = useRouter();
   // store
   const { setOrdersAll } = useOrdersApi();
+  const { setLogout } = useLogout();
 
   useEffect(() => {
     if (tab) {
@@ -100,13 +106,20 @@ const Profile = ({ dtUser }: Props) => {
                   <Icon.GearSix size={20} />
                   <strong className="heading6">Setting</strong>
                 </Link> */}
-                <Link
-                  href={"/login"}
-                  className="item flex items-center gap-3 w-full px-5 py-2 rounded-lg cursor-pointer duration-300 hover:bg-white mt-1.5"
-                >
-                  <Icon.SignOut size={20} />
-                  <strong className="heading6">Logout</strong>
-                </Link>
+                {loadLogout ? (
+                  // loading
+                  <span className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-primary rounded-full" />
+                ) : (
+                  <div
+                    onClick={() => {
+                      handleLogout({ setLogout, setLoadLogout, route });
+                    }}
+                    className="item flex items-center gap-3 w-full px-5 py-2 rounded-lg cursor-pointer duration-300 hover:bg-white mt-1.5"
+                  >
+                    <Icon.SignOut size={20} />
+                    <strong className="heading6">Logout</strong>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -1,6 +1,7 @@
 /** @format */
 
 import OrdersTypes from "./Orders";
+import ProductsTypes from "./Products";
 import VariantsTypes from "./Variants";
 
 // orderItems
@@ -12,5 +13,6 @@ export default interface OrderItemsTypes {
   quantity: number;
   total_price: number;
   product_variant: VariantsTypes;
+  product: ProductsTypes;
   order: OrdersTypes;
 }

@@ -13,12 +13,8 @@ const NotFound = () => {
         <span>4</span>
       </section>
       <div className="link-container">
-        <a
-          target="_blank"
-          href="https://www.silocreativo.com/en/creative-examples-404-error-css/"
-          className="more-link"
-        >
-          Visit the original article
+        <a target="_blank" href="/" className="more-link">
+          Kembali Ke Halaman Utama
         </a>
       </div>
     </section>

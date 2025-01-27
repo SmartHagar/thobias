@@ -30,6 +30,19 @@ const getProperty = (obj: any, prop: any, index: number, setIndexBox: any) => {
       const end_time = moment(obj["end_time"], "HH:mm:ss").format("HH:mm");
       return `${start_time} - ${end_time}`;
     }
+    if (last.includes("shipping_status_status")) {
+      const status = obj["shipping_status"]["status"];
+      console.log(status);
+      return (
+        <span
+          className={`capitalize ${
+            status === "selesai" ? "text-primary" : "text-red-500"
+          }`}
+        >
+          {status}
+        </span>
+      );
+    }
     // memisahkan properti dalam bentuk array
     const l = parts.length;
     let i = 1,

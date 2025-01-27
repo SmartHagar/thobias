@@ -1,6 +1,6 @@
 /** @format */
 "use client";
-import Link from "next/link";
+// import Link from "next/link";
 import React, { useState } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import Register from "./register";
@@ -87,16 +87,16 @@ const Login = () => {
                       className="icon-checkbox"
                     />
                   </div>
-                  <label htmlFor="remember" className="pl-2 cursor-pointer">
+                  {/* <label htmlFor="remember" className="pl-2 cursor-pointer">
                     Remember me
-                  </label>
+                  </label> */}
                 </div>
-                <Link
+                {/* <Link
                   href={"/forgot-password"}
                   className="font-semibold hover:underline"
                 >
                   Forgot Your Password?
-                </Link>
+                </Link> */}
               </div>
               <div className="block-button md:mt-7 mt-4">
                 <button className="button-main">Login</button>

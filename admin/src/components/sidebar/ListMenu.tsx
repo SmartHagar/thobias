@@ -1,7 +1,7 @@
 /** @format */
 import MenuTypes from "@/types/MenuTypes";
 
-import { BsBook, BsHouseDoor, BsSend } from "react-icons/bs";
+import { BsBook, BsDuffle, BsHouseDoor, BsInbox, BsSend } from "react-icons/bs";
 
 const createUrl = (path: string) => `${path}`;
 
@@ -30,7 +30,7 @@ const setAdminMenus = async () => {
     {
       name: "Kategori",
       slug: "categories",
-      icon: <BsHouseDoor />,
+      icon: <BsDuffle />,
       subMenus: [
         {
           name: "Daftar",
@@ -50,7 +50,7 @@ const setAdminMenus = async () => {
     {
       name: "Pesanan",
       href: createUrl("/orders"),
-      icon: <BsBook />,
+      icon: <BsInbox />,
     },
   ];
 

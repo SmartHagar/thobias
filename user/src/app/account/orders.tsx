@@ -220,12 +220,12 @@ const Orders = ({ dtUser, activeTab }: Props) => {
                   Bayar sekarang
                 </button>
               )}
-              {order.status === "selesai" && (
+              {order?.shipping_status?.status === "selesai" && (
                 <button
                   className="button-main"
                   onClick={() => handleQuickviewOpen(order)}
                 >
-                  Beri Nilai
+                  {order?.review?.length > 0 ? "Lihat Review" : "Beri Nilai"}
                 </button>
               )}
             </div>

@@ -84,6 +84,7 @@ const useLogin = create(
           data: response.data,
         };
       } catch (error: any) {
+        set((state) => ({ ...state, dtUser: undefined }));
         return {
           status: "error",
           error: error.response.data,
