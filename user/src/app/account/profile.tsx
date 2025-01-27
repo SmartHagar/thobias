@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,13 +8,22 @@ import Dashboard from "./dashboard";
 import Orders from "./orders";
 import Address from "./address";
 import Settings from "./settings";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   dtUser: any;
 };
 
 const Profile = ({ dtUser }: Props) => {
+  const searchParams = useSearchParams();
+  const tab = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState<string | undefined>("dashboard");
+
+  useEffect(() => {
+    if (tab) {
+      setActiveTab(tab);
+    }
+  }, [tab]);
 
   return (
     <div className="profile-block md:py-20 py-10">
@@ -41,7 +50,7 @@ const Profile = ({ dtUser }: Props) => {
               </div>
               <div className="menu-tab w-full max-w-none lg:mt-10 mt-6">
                 <Link
-                  href={"#!"}
+                  href={"?tab=dashboard"}
                   scroll={false}
                   className={`item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 hover:bg-white ${
                     activeTab === "dashboard" ? "active" : ""
@@ -52,7 +61,7 @@ const Profile = ({ dtUser }: Props) => {
                   <strong className="heading6">Dashboard</strong>
                 </Link>
                 <Link
-                  href={"#!"}
+                  href={"?tab=orders"}
                   scroll={false}
                   className={`item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 hover:bg-white mt-1.5 ${
                     activeTab === "orders" ? "active" : ""
@@ -63,7 +72,7 @@ const Profile = ({ dtUser }: Props) => {
                   <strong className="heading6">History Orders</strong>
                 </Link>
                 <Link
-                  href={"#!"}
+                  href={"?tab=address"}
                   scroll={false}
                   className={`item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 hover:bg-white mt-1.5 ${
                     activeTab === "address" ? "active" : ""
@@ -74,7 +83,7 @@ const Profile = ({ dtUser }: Props) => {
                   <strong className="heading6">My Address</strong>
                 </Link>
                 <Link
-                  href={"#!"}
+                  href={"?tab=setting"}
                   scroll={false}
                   className={`item flex items-center gap-3 w-full px-5 py-4 rounded-lg cursor-pointer duration-300 hover:bg-white mt-1.5 ${
                     activeTab === "setting" ? "active" : ""
@@ -109,7 +118,7 @@ const Profile = ({ dtUser }: Props) => {
                 activeTab === "orders" ? "block" : "hidden"
               }`}
             >
-              <Orders />
+              <Orders dtUser={dtUser} activeTab={activeTab} />
             </div>
             {/* if address active */}
             <div

@@ -1,9 +1,13 @@
 /** @format */
 "use client";
-import { BASE_URL } from "@/services/baseURL";
+import { BASE_URL, MIDTRANS_CLIENT_KEY } from "@/services/baseURL";
 import showRupiah from "@/services/rupiah";
 import useCartsApi from "@/store/api/Carts";
 import useRecipientsApi from "@/store/api/Recipients";
+import useOrders from "@/store/crud/Orders";
+import OrdersTypes from "@/type/OrdersType";
+import RecipientsTypes from "@/type/RecipientsType";
+import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -11,11 +15,14 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 const Checkout = () => {
-  const { dtCarts } = useCartsApi();
+  const { setCarts, dtCarts } = useCartsApi();
   const { setRecipients, dtRecipients } = useRecipientsApi();
+  const { addData } = useOrders();
   // state
   const [subTotal, setSubTotal] = useState(0);
   const [shippingCost, setShippingCost] = useState(0);
+  const [snapLoaded, setSnapLoaded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   //   router
   const router = useRouter();
   //   get recipients
@@ -37,6 +44,11 @@ const Checkout = () => {
     }, 0);
 
     setSubTotal(prince);
+    if (dtCarts?.data.length === 0) {
+      setTimeout(() => {
+        router.push("/account");
+      }, 3000);
+    }
 
     return () => {};
   }, [dtCarts.data]);
@@ -47,6 +59,83 @@ const Checkout = () => {
 
     return () => {};
   }, [dtRecipients.data]);
+
+  // useEffect
+  useEffect(() => {
+    // Memuat skrip Snap.js
+    const script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js"; // URL untuk sandbox atau production
+    //  get MIDTRANS_CLIENT_KEY from .env
+    script.setAttribute("data-client-key", MIDTRANS_CLIENT_KEY || "");
+    script.onload = () => setSnapLoaded(true);
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleSubmit = async (recipient: RecipientsTypes) => {
+    setIsLoading(true);
+
+    const total_payment = subTotal + shippingCost;
+
+    const row = {
+      user_id: recipient?.user_id,
+      village_id: recipient?.village_id,
+      nm_recipient: recipient?.nm_recipient,
+      phone: recipient?.phone,
+      address: recipient?.address,
+      shipping_cost: shippingCost,
+      total_price: subTotal,
+      total_payment,
+      status: "belum bayar",
+      carts: dtCarts.data,
+    };
+    const res = await addData(row);
+    console.log({ res });
+    if (res.status === "success") {
+      handlePayment(res.data.data);
+      await setCarts({ user_id: recipient?.user_id });
+      // router.push("/orders");
+    }
+    setIsLoading(false);
+  };
+  const handlePayment = async (order: OrdersTypes) => {
+    if (!snapLoaded) {
+      alert("Snap.js is not loaded yet!");
+      return;
+    }
+    const response = await axios.post(`${BASE_URL}/api/payment`, {
+      order_id: order.id,
+    });
+    const snapToken = response.data;
+    // Gunakan snapToken untuk membuka Snap popup
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    window.snap.pay(snapToken, {
+      onSuccess: function (result: any) {
+        /* Handle success */
+        console.log({ result });
+        router.push("/account?history_order=success");
+      },
+      onPending: function (result: any) {
+        /* Handle pending */
+        console.log({ result });
+        router.push("/account?history_order=pending");
+      },
+      onError: function (result: any) {
+        /* Handle error */
+        console.log({ result });
+        router.push("/account?history_order=error");
+      },
+      onClose: function () {
+        /* Handle when user close the popup without finishing payment */
+        console.log("user closed the popup");
+        router.push("/account?history_order=close");
+      },
+    });
+  };
 
   const goToOrder = () => {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -67,10 +156,18 @@ const Checkout = () => {
       .then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          router.push("/order");
+          handleSubmit(dtRecipients?.data?.[0]);
         }
       });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <section className="cart-block md:py-20 py-10">

@@ -65,7 +65,7 @@ const Menu = () => {
       >
         <div
           className="flex flex-col justify-center items-center cursor-pointer"
-          onClick={() => router.push("/account")}
+          onClick={() => router.push("/account?tab=dashboard")}
         >
           <GoPerson className="text-2xl" />
           <span className="text-sm">Profil</span>

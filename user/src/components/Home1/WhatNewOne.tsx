@@ -23,7 +23,7 @@ const WhatNewOne = () => {
 
   // setActiveTab default
   useEffect(() => {
-    setActiveTab(dtSubCategories[0]?.id);
+    setActiveTab(dtSubCategories?.[0]?.id);
   }, [dtSubCategories]);
 
   // get products
@@ -49,27 +49,28 @@ const WhatNewOne = () => {
           <div className="heading flex flex-col items-center text-center">
             <div className="heading3">Produk Terbaru</div>
             <div className="menu-tab flex items-center gap-2 p-1 bg-surface rounded-2xl mt-6">
-              {dtSubCategories.map((item) => {
-                return (
-                  <div
-                    key={item.id}
-                    className={`tab-item relative text-secondary text-button-uppercase py-2 px-5 cursor-pointer duration-500 hover:text-black ${
-                      activeTab === item.id ? "active" : ""
-                    }`}
-                    onClick={() => handleTabClick(item.id)}
-                  >
-                    {activeTab === item.id && (
-                      <motion.div
-                        layoutId="active-pill"
-                        className="absolute inset-0 rounded-2xl bg-white"
-                      ></motion.div>
-                    )}
-                    <span className="relative text-button-uppercase z-[1]">
-                      {item.sub_category_nm}
-                    </span>
-                  </div>
-                );
-              })}
+              {dtSubCategories &&
+                dtSubCategories.map((item) => {
+                  return (
+                    <div
+                      key={item.id}
+                      className={`tab-item relative text-secondary text-button-uppercase py-2 px-5 cursor-pointer duration-500 hover:text-black ${
+                        activeTab === item.id ? "active" : ""
+                      }`}
+                      onClick={() => handleTabClick(item.id)}
+                    >
+                      {activeTab === item.id && (
+                        <motion.div
+                          layoutId="active-pill"
+                          className="absolute inset-0 rounded-2xl bg-white"
+                        ></motion.div>
+                      )}
+                      <span className="relative text-button-uppercase z-[1]">
+                        {item.sub_category_nm}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           </div>
           {isLoading && <div className="text-center mt-10">Loading...</div>}

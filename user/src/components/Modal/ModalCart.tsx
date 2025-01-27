@@ -60,7 +60,7 @@ const ModalCart = () => {
 
   // count price
   useEffect(() => {
-    const prince = dtCarts.data.reduce((acc, item) => {
+    const prince = dtCarts?.data?.reduce((acc, item) => {
       return (
         acc +
         item?.quantity *
@@ -93,7 +93,7 @@ const ModalCart = () => {
               </div>
             </div>
             <div className="list-cart px-6">
-              {dtCarts.data.map((cart) => {
+              {dtCarts?.data?.map((cart) => {
                 const img = cart.product_variant_id
                   ? cart.product_variant.variant_img
                   : cart.product.product_image.find((item) => item.is_main)
@@ -176,10 +176,10 @@ const ModalCart = () => {
             <div className="footer-modal bg-white absolute bottom-0 left-0 w-full">
               <div className="flex items-center justify-between pt-6 px-6">
                 <div className="heading5">Subtotal</div>
-                <div className="heading5">{showRupiah(subTotal)}</div>
+                <div className="heading5">{showRupiah(subTotal || 0)}</div>
               </div>
               <div className="block-button text-center p-6">
-                {dtCarts.data.length > 0 && (
+                {dtCarts?.data?.length > 0 && (
                   <Checkout
                     closeModalCart={closeModalCart}
                     user_id={dtCarts?.data?.[0]?.user_id}

@@ -11,6 +11,7 @@ import ModalCompare from "@/components/Modal/ModalCompare";
 import Menu from "@/components/Footer/Menu";
 import TopNavThree from "@/components/Header/TopNav/TopNavThree";
 import MenuFour from "@/components/Header/Menu/MenuFour";
+import ModalReview from "@/components/Modal/ModalReviews";
 
 export const metadata: Metadata = {
   title: "WWF",
@@ -39,6 +40,7 @@ export default function RootLayout({
           <ModalSearch />
           <ModalQuickview />
           <ModalCompare />
+          <ModalReview />
         </body>
       </html>
     </GlobalProvider>

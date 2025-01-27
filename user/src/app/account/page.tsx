@@ -1,15 +1,16 @@
 /** @format */
 "use client";
 import useLogin from "@/store/auth/login";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Profile from "./profile";
 import Login from "./login";
 import { Toaster } from "react-hot-toast";
+import Loading from "@/components/Other/Loading";
 
 const Account = () => {
   const { cekToken, dtUser } = useLogin();
   // state
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     setIsLoading(true);
     cekToken();
@@ -19,17 +20,22 @@ const Account = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-full w-screen flex items-center justify-center">
+        {/* animation loading */}
+        <Loading />
+      </div>
+    );
   }
 
   return (
     <main>
       <Toaster />
 
-      {dtUser ? (
-        <section>
+      {!isLoading && dtUser ? (
+        <Suspense fallback={<Loading />}>
           <Profile dtUser={dtUser} />
-        </section>
+        </Suspense>
       ) : (
         <section>
           <Login />

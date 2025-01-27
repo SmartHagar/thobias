@@ -35,7 +35,7 @@ const MenuFour: React.FC<Props> = ({ props }) => {
   // count quantity
   useEffect(() => {
     let count = 0;
-    dtCarts.data.map((item) => (count += item.quantity));
+    dtCarts?.data?.map((item) => (count += item.quantity));
     setCountQuantity(count);
   }, [dtCarts]);
   const router = useRouter();
