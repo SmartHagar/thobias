@@ -39,8 +39,6 @@ const Orders = ({ dtUser, activeTab }: Props) => {
     return () => {};
   }, [activeOrders, activeTab, dtUser.user.id, setOrdersAll]);
 
-  console.log({ dtOrders });
-
   useEffect(() => {
     // Memuat skrip Snap.js
     const script = document.createElement("script");
@@ -161,7 +159,7 @@ const Orders = ({ dtUser, activeTab }: Props) => {
                     className="prd_item flex flex-wrap items-center justify-between gap-3 border-b border-line"
                   >
                     <Link
-                      href={"/product/default"}
+                      href={"/product/detail?id=" + cart.product.id}
                       className="flex items-center gap-5"
                     >
                       <div className="bg-img flex-shrink-0 md:w-[100px] w-20 aspect-square rounded-lg overflow-hidden">

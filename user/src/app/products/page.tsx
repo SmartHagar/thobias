@@ -3,38 +3,49 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useProductsApi from "@/store/api/Products";
 import Product from "@/components/Product/Product";
 import useSubCategoriesApi from "@/store/api/SubCategories";
 import { motion } from "framer-motion";
-// import * as Icon from "@phosphor-icons/react/dist/ssr";
+import * as Icon from "@phosphor-icons/react/dist/ssr";
+import useCategoriesApi from "@/store/api/Categories";
 // import Link from "next/link";
 
 export default function BreadCrumb1() {
+  // state
   const [activeTab, setActiveTab] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   //   search params
   const searchParams = useSearchParams();
-  const sub_category_id = searchParams.get("sub_category_id");
-
+  const category_id = searchParams.get("category_id") || "";
+  // router
+  const router = useRouter();
   // store
   const { setSubCategoriesAll, dtSubCategories } = useSubCategoriesApi();
+  const { setCategoriesAll, dtCategories } = useCategoriesApi();
   const { setProducts, dtProducts } = useProductsApi();
 
   // get all subcategories
   useEffect(() => {
-    setSubCategoriesAll({});
-  }, [setSubCategoriesAll]);
+    setSubCategoriesAll({ category_id });
+  }, [category_id, setSubCategoriesAll]);
+
+  // get all categories
+  useEffect(() => {
+    setCategoriesAll();
+  }, [setCategoriesAll, setSubCategoriesAll]);
 
   // setActiveTab default
   useEffect(() => {
-    if (sub_category_id) {
-      setActiveTab(sub_category_id);
-    } else {
+    if (dtSubCategories.length > 0) {
       setActiveTab(dtSubCategories[0]?.id);
+    } else {
+      setActiveTab("kosong");
     }
-  }, [dtSubCategories, sub_category_id]);
+  }, [dtSubCategories, dtSubCategories.length]);
+
+  console.log({ activeTab });
 
   // get products
   useEffect(() => {
@@ -42,7 +53,7 @@ export default function BreadCrumb1() {
       setIsLoading(true);
       setProducts({
         limit: 10,
-        sub_category_id: activeTab,
+        sub_category_id: activeTab || "kosong",
       });
       setIsLoading(false);
     }
@@ -52,40 +63,41 @@ export default function BreadCrumb1() {
     setActiveTab(type);
   };
 
-  // const handleSortChange = (e: string) => {
-
-  // };
+  const handleCategoryChange = (type: string) => {
+    router.push(`/products?category_id=${type}`);
+  };
 
   return (
     <div className="whate-new-block md:pt-20 pt-10">
       <div className="container">
         <div className="heading flex flex-col items-center text-center">
           <div className="heading3">Produk</div>
-          {/* <div className="right flex items-center gap-3">
+          <div className="right flex items-center gap-3">
             <div className="select-block relative">
               <select
                 id="select-filter"
                 name="select-filter"
                 className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
                 onChange={(e) => {
-                  handleSortChange(e.target.value);
+                  handleCategoryChange(e.target.value);
                 }}
-                defaultValue={"Sorting"}
+                value={category_id}
               >
-                <option value="Sorting" disabled>
-                  Sorting
-                </option>
-                <option value="soldQuantityHighToLow">Best Selling</option>
-                <option value="discountHighToLow">Best Discount</option>
-                <option value="priceHighToLow">Price High To Low</option>
-                <option value="priceLowToHigh">Price Low To High</option>
+                <option value="">Kategori</option>
+                {dtCategories.map((item) => {
+                  return (
+                    <option key={item.id} value={item.id}>
+                      {item.category_nm}
+                    </option>
+                  );
+                })}
               </select>
               <Icon.CaretDown
                 size={12}
                 className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
               />
             </div>
-          </div> */}
+          </div>
 
           <div className="menu-tab flex items-center gap-2 p-1 bg-surface rounded-2xl mt-6">
             {dtSubCategories.map((item) => {

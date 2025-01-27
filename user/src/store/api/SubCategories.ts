@@ -16,6 +16,7 @@ type Props = {
   page?: number;
   sortby?: string;
   order?: string;
+  category_id?: string;
 };
 
 type Store = {
@@ -32,6 +33,7 @@ type Store = {
     page,
     sortby,
     order,
+    category_id,
   }: Props) => Promise<{
     status: string;
     data?: {};
@@ -75,7 +77,13 @@ const useSubCategoriesApi = create(
         };
       }
     },
-    setSubCategoriesAll: async ({ search, page, sortby, order }) => {
+    setSubCategoriesAll: async ({
+      search,
+      page,
+      sortby,
+      order,
+      category_id,
+    }) => {
       try {
         const response = await api({
           method: "get",
@@ -85,6 +93,7 @@ const useSubCategoriesApi = create(
             page,
             sortby,
             order,
+            category_id,
           },
         });
         set((state) => ({
