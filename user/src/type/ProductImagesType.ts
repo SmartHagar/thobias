@@ -1,6 +1,6 @@
 /** @format */
 
-import ProductVariantsTypes from "./Variants";
+import VariantsTypes from "./VariantsType";
 
 // productImages
 export default interface ProductImagesTypes {
@@ -8,5 +8,5 @@ export default interface ProductImagesTypes {
   product_variant_id: string;
   is_main: boolean | number;
   product_img: string;
-  product_variant: ProductVariantsTypes;
+  product_variant: VariantsTypes;
 }

@@ -30,7 +30,7 @@ type Store = {
     from: number;
   };
   allProducts?: ProductsTypes[];
-  showCategory?: ProductsTypes;
+  showProduct?: ProductsTypes;
   setProducts: ({
     search,
     limit,
@@ -138,11 +138,11 @@ const useProductsApi = create(
       try {
         const response = await api({
           method: "get",
-          url: `/products/${id}`,
+          url: `/products/detail/${id}`,
         });
         set((state) => ({
           ...state,
-          showCategory: response.data.data,
+          showProduct: response.data.data,
         }));
         return {
           status: "berhasil",

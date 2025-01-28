@@ -16,7 +16,7 @@ const Dashboard = () => {
     if (dtOrders?.data) {
       const shippingStatus = ["dikemas", "dikirim"];
       const proses = dtOrders?.data?.filter((item: OrdersTypes) =>
-        shippingStatus.includes(item?.shipping_status?.status)
+        shippingStatus.includes(item?.shipping_status?.status as string)
       );
       const cancel = dtOrders?.data?.filter(
         (item: OrdersTypes) => item.status === "batal"

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://hagar.satgar.my.id
+
+# Sitemaps
+Sitemap: https://hagar.satgar.my.id/sitemap.xml

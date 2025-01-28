@@ -1,10 +1,9 @@
 /** @format */
 
 import { User } from ".";
-import OrderItemsTypes from "./OrderItems";
-import ReviewsTypes from "./Reviews";
-import ShippingCostsTypes from "./Village";
-import ShippingStatusesTypes from "./ShippingStatuses";
+import OrderItemsTypes from "./OrderItemsType";
+import ReviewsTypes from "./ReviewsType";
+import ShippingStatusesTypes from "./ShippingStatusesType";
 
 // orders
 export default interface OrdersTypes {
@@ -18,7 +17,7 @@ export default interface OrdersTypes {
   order_items: OrderItemsTypes[];
   snap_token: string;
   created_at: string;
-  shipping_cost: ShippingCostsTypes;
+  shipping_cost: number;
   shipping_status?: ShippingStatusesTypes;
   review: ReviewsTypes[];
   user: User;
