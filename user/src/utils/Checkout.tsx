@@ -31,7 +31,7 @@ const Checkout = ({ closeModalCart, user_id }: Props) => {
           message: "Silahkan tambahkan alamat terlebih dahulu",
         },
       });
-      router.push("/account");
+      router.push("/account?tab=address");
       closeModalCart();
     }
   };

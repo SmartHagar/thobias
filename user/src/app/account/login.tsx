@@ -2,7 +2,7 @@
 "use client";
 // import Link from "next/link";
 import React, { useState } from "react";
-import * as Icon from "@phosphor-icons/react/dist/ssr";
+// import * as Icon from "@phosphor-icons/react/dist/ssr";
 import Register from "./register";
 import useLogin from "@/store/auth/login";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -78,19 +78,6 @@ const Login = () => {
                 )}
               </div>
               <div className="flex items-center justify-between mt-5">
-                <div className="flex items-center">
-                  <div className="block-input">
-                    <input type="checkbox" name="remember" id="remember" />
-                    <Icon.CheckSquare
-                      size={20}
-                      weight="fill"
-                      className="icon-checkbox"
-                    />
-                  </div>
-                  {/* <label htmlFor="remember" className="pl-2 cursor-pointer">
-                    Remember me
-                  </label> */}
-                </div>
                 {/* <Link
                   href={"/forgot-password"}
                   className="font-semibold hover:underline"

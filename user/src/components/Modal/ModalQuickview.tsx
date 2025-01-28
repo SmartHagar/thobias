@@ -336,10 +336,9 @@ const ModalQuickview = () => {
                   </div>
                   <div className="more-infor mt-6">
                     <div className="flex items-center gap-1 mt-3">
-                      <div className="text-title">Categories:</div>
+                      <div className="text-title">Kategori:</div>
                       <div className="text-secondary">
-                        kategori
-                        {/* {selectedProduct?.category}, {selectedProduct?.gender} */}
+                        {selectedProduct?.subCategory?.category?.category_nm}
                       </div>
                     </div>
                   </div>

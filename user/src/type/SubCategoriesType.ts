@@ -1,6 +1,6 @@
 /** @format */
 
-import CategoriesTypes from "./Categories";
+import CategoriesTypes from "./CategoriesType";
 
 export default interface SubCategoriesTypes {
   id: string;

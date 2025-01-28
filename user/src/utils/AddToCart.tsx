@@ -5,6 +5,7 @@ import useLogin from "@/store/auth/login";
 import React from "react";
 import { Toaster } from "react-hot-toast";
 import toastShow from "./toast-show";
+import { useRouter } from "next/navigation";
 
 type Props = {
   selectedVariantOrProduct: {
@@ -17,6 +18,8 @@ type Props = {
 const AddToCart = ({ selectedVariantOrProduct, quantity }: Props) => {
   const { cekToken } = useLogin();
   const { addCart } = useCartsApi();
+  // router
+  const router = useRouter();
   const handleAddToCart = async () => {
     if (!selectedVariantOrProduct) {
       return toastShow({
@@ -29,12 +32,13 @@ const AddToCart = ({ selectedVariantOrProduct, quantity }: Props) => {
     // cek login
     const token = await cekToken();
     if (token?.error) {
-      return toastShow({
+      toastShow({
         event: {
           type: "error",
           message: "Silahkan login terlebih dahulu",
         },
       });
+      return router.push("/account");
     }
 
     const res = await addCart({
