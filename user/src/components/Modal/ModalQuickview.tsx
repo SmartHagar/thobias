@@ -12,11 +12,12 @@ import toastShow from "@/utils/toast-show";
 import { Toaster } from "react-hot-toast";
 import showRupiah from "@/services/rupiah";
 import AddToCart from "@/utils/AddToCart";
+import Variants from "../Other/Variants";
 
 const ModalQuickview = () => {
   // state
-  const [activeColor, setActiveColor] = useState<string | null>("");
-  const [activeSize, setActiveSize] = useState<string | null>("");
+  const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [activeSize, setActiveSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   // context
   const { selectedProduct, closeQuickview } = useModalQuickviewContext();
@@ -35,34 +36,14 @@ const ModalQuickview = () => {
 
   // reset state
   const resetState = () => {
-    setActiveColor("");
-    setActiveSize("");
+    setActiveColor(null);
+    setActiveSize(null);
     setQuantity(1);
   };
 
   useEffect(() => {
     resetState();
   }, [selectedProduct]);
-
-  // Ambil daftar color unik
-  const uniqueColors = Array.from(
-    new Set(
-      selectedProduct?.product_variant
-        .filter((item) => (activeSize ? item.size === activeSize : true))
-        .map((item) => item.color)
-        .filter(Boolean)
-    )
-  );
-
-  // Ambil daftar size unik berdasarkan color yang dipilih
-  const uniqueSizes = Array.from(
-    new Set(
-      selectedProduct?.product_variant
-        .filter((item) => (activeColor ? item.color === activeColor : true))
-        .map((item) => item.size)
-        .filter(Boolean)
-    )
-  );
 
   const findSelectedVariant = () => {
     // If product has no variants, return the product details
@@ -102,28 +83,6 @@ const ModalQuickview = () => {
         }
       : null;
   };
-
-  // Handle perubahan pada color
-  const handleActiveColor = (color: string) => {
-    setActiveColor(color);
-    findSelectedVariant();
-  };
-
-  // Handle perubahan pada size
-  const handleActiveSize = (size: string) => {
-    setActiveSize(size);
-    findSelectedVariant();
-  };
-
-  // setActiveSize and setActiveColor if uniqueColors or uniqueSizes not empty
-  useEffect(() => {
-    if (uniqueColors.length > 0) {
-      setActiveColor(uniqueColors[0]);
-    }
-    if (uniqueSizes.length > 0) {
-      setActiveSize(uniqueSizes[0]);
-    }
-  }, [uniqueColors, uniqueSizes]);
 
   const selectedVariantOrProduct = findSelectedVariant();
 
@@ -241,74 +200,18 @@ const ModalQuickview = () => {
                   <div className="product-price heading5">
                     {showRupiah(selectedVariantOrProduct?.price || 0)}
                   </div>
-                  <div className="desc text-secondary mt-3">
-                    <article
-                      className="prose lg:prose-xl"
-                      dangerouslySetInnerHTML={{
-                        __html: selectedProduct?.product_desc || "",
-                      }}
-                    />
-                  </div>
                 </div>
                 <div className="list-action mt-6">
-                  {uniqueColors.length > 0 && (
-                    <div className="choose-color">
-                      <div className="text-title">
-                        Colors:{" "}
-                        <span className="text-title color">{activeColor}</span>
-                      </div>
-                      <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                        <div className="right flex items-center gap-3">
-                          <div className="select-block relative">
-                            <select
-                              id="select-filter"
-                              name="select-filter"
-                              className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
-                              onChange={(e) => {
-                                handleActiveColor(e.target.value);
-                              }}
-                            >
-                              {uniqueColors.map((item, index) => (
-                                <option value={item} key={index}>
-                                  {item}
-                                </option>
-                              ))}
-                            </select>
-                            <Icon.CaretDown
-                              size={12}
-                              className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {uniqueSizes.length > 0 && (
-                    <div className="choose-size mt-5">
-                      <div className="heading flex items-center justify-between">
-                        <div className="text-title">
-                          Size:{" "}
-                          <span className="text-title size">{activeSize}</span>
-                        </div>
-                      </div>
-                      <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                        {uniqueSizes.map((size, index) => (
-                          <div
-                            className={`size-item ${
-                              size === "freesize" ? "px-3 py-2" : "w-12 h-12"
-                            } flex items-center justify-center text-button rounded-full bg-white border border-line ${
-                              activeSize === size ? "active" : ""
-                            }`}
-                            key={index}
-                            onClick={() => handleActiveSize(size)}
-                          >
-                            {size}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  {selectedProduct &&
+                    selectedProduct?.product_variant?.length > 0 && (
+                      <Variants
+                        product_variant={selectedProduct?.product_variant}
+                        activeColor={activeColor}
+                        activeSize={activeSize}
+                        setActiveColor={setActiveColor}
+                        setActiveSize={setActiveSize}
+                      />
+                    )}
                   <div className="text-title mt-5">Quantity:</div>
                   <div className="choose-quantity flex items-center max-xl:flex-wrap lg:justify-between gap-5 mt-3">
                     <div className="quantity-block md:p-3 max-md:py-1.5 max-md:px-3 flex items-center justify-between rounded-lg border border-line sm:w-[180px] w-[120px] flex-shrink-0">
@@ -339,13 +242,13 @@ const ModalQuickview = () => {
                       Beli Sekarang
                     </div>
                   </div>
-                  <div className="more-infor mt-6">
-                    <div className="flex items-center gap-1 mt-3">
-                      <div className="text-title">Kategori:</div>
-                      <div className="text-secondary">
-                        {selectedProduct?.subCategory?.category?.category_nm}
-                      </div>
-                    </div>
+                  <div className="desc text-secondary mt-3">
+                    <article
+                      className="prose lg:prose-xl"
+                      dangerouslySetInnerHTML={{
+                        __html: selectedProduct?.product_desc || "",
+                      }}
+                    />
                   </div>
                 </div>
               </div>

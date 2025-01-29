@@ -16,6 +16,7 @@ import showRupiah from "@/services/rupiah";
 import toastShow from "@/utils/toast-show";
 import AddToCart from "@/utils/AddToCart";
 import ListReview from "@/components/Other/ListReview";
+import Variants from "@/components/Other/Variants";
 
 SwiperCore.use([Navigation, Thumbs]);
 
@@ -23,8 +24,8 @@ const Detail = () => {
   const swiperRef: any = useRef();
   // state
   const [openPopupImg, setOpenPopupImg] = useState(false);
-  const [activeColor, setActiveColor] = useState<string | null>("");
-  const [activeSize, setActiveSize] = useState<string | null>("");
+  const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [activeSize, setActiveSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   //  params
   const searchParams = useSearchParams();
@@ -50,34 +51,14 @@ const Detail = () => {
 
   // reset state
   const resetState = () => {
-    setActiveColor("");
-    setActiveSize("");
+    setActiveColor(null);
+    setActiveSize(null);
     setQuantity(1);
   };
 
   useEffect(() => {
     resetState();
   }, [showProduct]);
-
-  // Ambil daftar color unik
-  const uniqueColors = Array.from(
-    new Set(
-      showProduct?.product_variant
-        .filter((item) => (activeSize ? item.size === activeSize : true))
-        .map((item) => item.color)
-        .filter(Boolean)
-    )
-  );
-
-  // Ambil daftar size unik berdasarkan color yang dipilih
-  const uniqueSizes = Array.from(
-    new Set(
-      showProduct?.product_variant
-        .filter((item) => (activeColor ? item.color === activeColor : true))
-        .map((item) => item.size)
-        .filter(Boolean)
-    )
-  );
 
   const findSelectedVariant = () => {
     // If product has no variants, return the product details
@@ -118,28 +99,6 @@ const Detail = () => {
       : null;
   };
 
-  // Handle perubahan pada color
-  const handleActiveColor = (color: string) => {
-    setActiveColor(color);
-    findSelectedVariant();
-  };
-
-  // Handle perubahan pada size
-  const handleActiveSize = (size: string) => {
-    setActiveSize(size);
-    findSelectedVariant();
-  };
-
-  // setActiveSize and setActiveColor if uniqueColors or uniqueSizes not empty
-  useEffect(() => {
-    if (uniqueColors.length > 0) {
-      setActiveColor(uniqueColors[0]);
-    }
-    if (uniqueSizes.length > 0) {
-      setActiveSize(uniqueSizes[0]);
-    }
-  }, [uniqueColors, uniqueSizes]);
-
   const selectedVariantOrProduct = findSelectedVariant();
 
   const handleIncreaseQuantity = () => {
@@ -163,13 +122,11 @@ const Detail = () => {
   const handleDecreaseQuantity = () =>
     setQuantity((prevQuiantity) => Math.max(prevQuiantity - 1, 1));
 
-  console.log({ showProduct });
-
   return (
     <div className="product-detail default">
       {/* image */}
-      <div className="featured-product underwear md:py-20 py-10">
-        <div className="container flex justify-between gap-y-6 flex-wrap">
+      <div className="featured-product underwear md:py-20">
+        <div className="container flex justify-between flex-wrap">
           <div className="list-img md:w-1/2 md:pr-[45px] w-full">
             <Swiper
               slidesPerView={1}
@@ -281,81 +238,18 @@ const Detail = () => {
               <div className="product-price heading5">
                 {showRupiah(selectedVariantOrProduct?.price || 0)}
               </div>
-              <div className="w-px h-4 bg-line"></div>
-              <div className="desc text-secondary mt-3">
-                <article
-                  className="prose lg:prose-xl"
-                  dangerouslySetInnerHTML={{
-                    __html: showProduct?.product_desc || "",
-                  }}
-                />
-              </div>
             </div>
-            <div className="list-action mt-6">
-              <div className="choose-color">
-                <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                  {uniqueColors.length > 0 && (
-                    <div className="choose-color">
-                      <div className="text-title">
-                        Colors:{" "}
-                        <span className="text-title color">{activeColor}</span>
-                      </div>
-                      <div className="list-color flex items-center gap-2 flex-wrap mt-3">
-                        <div className="right flex items-center gap-3">
-                          <div className="select-block relative">
-                            <select
-                              id="select-filter"
-                              name="select-filter"
-                              className="caption1 py-2 pl-3 md:pr-20 pr-10 rounded-lg border border-line"
-                              onChange={(e) => {
-                                handleActiveColor(e.target.value);
-                              }}
-                            >
-                              {uniqueColors.map((item, index) => (
-                                <option value={item} key={index}>
-                                  {item}
-                                </option>
-                              ))}
-                            </select>
-                            <Icon.CaretDown
-                              size={12}
-                              className="absolute top-1/2 -translate-y-1/2 md:right-4 right-2"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="choose-size mt-5">
-                <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                  {uniqueSizes.length > 0 && (
-                    <div className="choose-size mt-5">
-                      <div className="heading flex items-center justify-between">
-                        <div className="text-title">
-                          Size:{" "}
-                          <span className="text-title size">{activeSize}</span>
-                        </div>
-                      </div>
-                      <div className="list-size flex items-center gap-2 flex-wrap mt-3">
-                        {uniqueSizes.map((size, index) => (
-                          <div
-                            className={`size-item ${
-                              size === "freesize" ? "px-3 py-2" : "w-12 h-12"
-                            } flex items-center justify-center text-button rounded-full bg-white border border-line ${
-                              activeSize === size ? "active" : ""
-                            }`}
-                            key={index}
-                            onClick={() => handleActiveSize(size)}
-                          >
-                            {size}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+            <div className="list-action mt-2">
+              <div>
+                {showProduct && showProduct?.product_variant?.length > 0 && (
+                  <Variants
+                    product_variant={showProduct?.product_variant}
+                    activeColor={activeColor}
+                    activeSize={activeSize}
+                    setActiveColor={setActiveColor}
+                    setActiveSize={setActiveSize}
+                  />
+                )}
               </div>
               <div className="text-title mt-5">Quantity:</div>
               <div className="choose-quantity flex items-center lg:justify-between gap-5 gap-y-3 mt-3">
@@ -378,8 +272,18 @@ const Detail = () => {
                 />
               </div>
               <div className="button-block mt-5">
-                <div className="button-main w-full text-center">Buy It Now</div>
+                <div className="button-main w-full text-center">
+                  Beli Sekarang
+                </div>
               </div>
+            </div>
+            <div className="desc text-secondary my-3">
+              <article
+                className="prose lg:prose-xl"
+                dangerouslySetInnerHTML={{
+                  __html: showProduct?.product_desc || "",
+                }}
+              />
             </div>
           </div>
         </div>
