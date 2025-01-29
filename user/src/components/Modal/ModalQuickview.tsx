@@ -242,7 +242,12 @@ const ModalQuickview = () => {
                     {showRupiah(selectedVariantOrProduct?.price || 0)}
                   </div>
                   <div className="desc text-secondary mt-3">
-                    {selectedProduct?.product_desc}
+                    <article
+                      className="prose lg:prose-xl"
+                      dangerouslySetInnerHTML={{
+                        __html: selectedProduct?.product_desc || "",
+                      }}
+                    />
                   </div>
                 </div>
                 <div className="list-action mt-6">

@@ -125,12 +125,12 @@ const Collection = () => {
                     className="collection-item block relative rounded-2xl overflow-hidden cursor-pointer"
                     onClick={() => handleTypeClick(category.id)}
                   >
-                    <div className="bg-img">
+                    <div className="bg-img h-64">
                       <Image
                         src={`${BASE_URL}/${category.img[0]}`}
-                        width={1000}
-                        height={600}
+                        fill
                         alt={category.category_nm}
+                        className="w-full h-32 object-cover"
                       />
                     </div>
                     <div className="collection-name heading5 text-center sm:bottom-8 bottom-4 lg:w-[200px] md:w-[160px] w-[100px] md:py-3 py-1.5 bg-white rounded-xl duration-500">

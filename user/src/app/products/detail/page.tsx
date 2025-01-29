@@ -26,7 +26,6 @@ const Detail = () => {
   const [activeColor, setActiveColor] = useState<string | null>("");
   const [activeSize, setActiveSize] = useState<string | null>("");
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<string | undefined>("description");
   //  params
   const searchParams = useSearchParams();
   const product_id = searchParams.get("product_id");
@@ -166,10 +165,6 @@ const Detail = () => {
 
   console.log({ showProduct });
 
-  const handleActiveTab = (tab: string) => {
-    setActiveTab(tab);
-  };
-
   return (
     <div className="product-detail default">
       {/* image */}
@@ -288,7 +283,12 @@ const Detail = () => {
               </div>
               <div className="w-px h-4 bg-line"></div>
               <div className="desc text-secondary mt-3">
-                {showProduct?.product_desc}
+                <article
+                  className="prose lg:prose-xl"
+                  dangerouslySetInnerHTML={{
+                    __html: showProduct?.product_desc || "",
+                  }}
+                />
               </div>
             </div>
             <div className="list-action mt-6">
@@ -379,134 +379,6 @@ const Detail = () => {
               </div>
               <div className="button-block mt-5">
                 <div className="button-main w-full text-center">Buy It Now</div>
-              </div>
-            </div>
-            <div className="get-it mt-6 pb-8 border-b border-line">
-              <div className="heading5">Get it today</div>
-              <div className="item flex items-center gap-3 mt-4">
-                <div className="icon-delivery-truck text-4xl"></div>
-                <div>
-                  <div className="text-title">Free shipping</div>
-                  <div className="caption1 text-secondary mt-1">
-                    Free shipping on orders over $75.
-                  </div>
-                </div>
-              </div>
-              <div className="item flex items-center gap-3 mt-4">
-                <div className="icon-phone-call text-4xl"></div>
-                <div>
-                  <div className="text-title">Support everyday</div>
-                  <div className="caption1 text-secondary mt-1">
-                    Support from 8:30 AM to 10:00 PM everyday
-                  </div>
-                </div>
-              </div>
-              <div className="item flex items-center gap-3 mt-4">
-                <div className="icon-return text-4xl"></div>
-                <div>
-                  <div className="text-title">100 Day Returns</div>
-                  <div className="caption1 text-secondary mt-1">
-                    Not impressed? Get a refund. You have 100 days to break our
-                    hearts.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="desc-tab md:pb-20 pb-10">
-        <div className="container">
-          <div className="flex items-center justify-center w-full">
-            <div className="menu-tab flex items-center md:gap-[60px] gap-8">
-              <div
-                className={`tab-item heading5 has-line-before text-secondary2 hover:text-black duration-300 ${
-                  activeTab === "description" ? "active" : ""
-                }`}
-                onClick={() => handleActiveTab("description")}
-              >
-                Description
-              </div>
-              <div
-                className={`tab-item heading5 has-line-before text-secondary2 hover:text-black duration-300 ${
-                  activeTab === "specifications" ? "active" : ""
-                }`}
-                onClick={() => handleActiveTab("specifications")}
-              >
-                Specifications
-              </div>
-            </div>
-          </div>
-          <div className="desc-block mt-8">
-            <div
-              className={`desc-item description ${
-                activeTab === "description" ? "open" : ""
-              }`}
-            >
-              <div className="grid md:grid-cols-2 gap-8 gap-y-5">
-                <div className="left">
-                  <div className="text-secondary mt-2">
-                    {showProduct?.product_desc}
-                  </div>
-                </div>
-              </div>
-              <div className="grid lg:grid-cols-4 grid-cols-2 gap-[30px] md:mt-10 mt-6">
-                <div className="item">
-                  <div className="icon-delivery-truck text-4xl"></div>
-                  <div className="heading6 mt-4">Shipping Faster</div>
-                  <div className="text-secondary mt-2">
-                    Use on walls, furniture, doors and many more surfaces. The
-                    possibilities are endless.
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="icon-cotton text-4xl"></div>
-                  <div className="heading6 mt-4">Cotton Material</div>
-                  <div className="text-secondary mt-2">
-                    Use on walls, furniture, doors and many more surfaces. The
-                    possibilities are endless.
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="icon-guarantee text-4xl"></div>
-                  <div className="heading6 mt-4">High Quality</div>
-                  <div className="text-secondary mt-2">
-                    Use on walls, furniture, doors and many more surfaces. The
-                    possibilities are endless.
-                  </div>
-                </div>
-                <div className="item">
-                  <div className="icon-leaves-compatible text-4xl"></div>
-                  <div className="heading6 mt-4">highly compatible</div>
-                  <div className="text-secondary mt-2">
-                    Use on walls, furniture, doors and many more surfaces. The
-                    possibilities are endless.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`desc-item specifications flex items-center justify-center ${
-                activeTab === "specifications" ? "open" : ""
-              }`}
-            >
-              <div className="lg:w-1/2 sm:w-3/4 w-full">
-                <div className="item bg-surface flex items-center gap-8 py-3 px-10">
-                  <div className="text-title sm:w-1/4 w-1/3">Rating</div>
-                  <div className="flex items-center gap-1">
-                    <Rate currentRate={4} size={12} />
-                    <p>(1.234)</p>
-                  </div>
-                </div>
-                <div className="item flex items-center gap-8 py-3 px-10">
-                  <div className="text-title sm:w-1/4 w-1/3">Size</div>
-                  <p>S, M, L, XL</p>
-                </div>
-                <div className="item bg-surface flex items-center gap-8 py-3 px-10">
-                  <div className="text-title sm:w-1/4 w-1/3">Colors</div>
-                  <p>Grey, Red, Blue, Black</p>
-                </div>
               </div>
             </div>
           </div>

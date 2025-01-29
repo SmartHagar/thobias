@@ -2,6 +2,7 @@
 
 import type { Config } from "tailwindcss";
 // import colors from "./src/utils/colors";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   content: [
@@ -41,6 +42,6 @@ const config: Config = {
       surface1: "rgba(255, 255, 255, 0.1)",
     },
   },
-  plugins: [],
+  plugins: [typography],
 };
 export default config;
