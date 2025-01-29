@@ -9,14 +9,14 @@ const Login = () => {
       <div className="px-10 pb-10 xs:p-0">
         <Image
           alt="logo"
-          src="/images/hagar.png"
+          src="/images/logo.png"
           className="mx-auto mb-3"
           width={100}
           height={100}
         />
         <div className="text-center font-merriweather font-black text-lg my-4 text-neutral">
-          <h4 className="text-xl">Portofolio</h4>
-          <p>Hagar Sawor</p>
+          <h4 className="text-xl">WWF Store</h4>
+          <p>Login ADMIN</p>
         </div>
         <div className="backdrop-blur-lg shadow w-full rounded-lg pb-3  mx-auto md:w-full md:max-w-md">
           <Form />

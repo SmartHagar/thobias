@@ -8,8 +8,8 @@ const createUrl = (path: string) => `${path}`;
 const setAdminMenus = async () => {
   const ListMenu: MenuTypes[] = [
     {
-      name: "Home",
-      href: createUrl("/"),
+      name: "Dashboard",
+      href: createUrl("/dashboard"),
       icon: <BsHouseDoor />,
     },
     {

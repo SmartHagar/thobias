@@ -59,7 +59,7 @@ const Form = () => {
       // set cookie
       Cookies.set("token", token);
       Cookies.set("user", JSON.stringify(user));
-      router.push(`/admin`);
+      router.push(`/dashboard`);
     }
     setIsLoading(false);
   };

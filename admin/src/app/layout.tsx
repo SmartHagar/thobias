@@ -7,6 +7,7 @@ import WelcomeContextProvider from "@/context/WelcomeContext";
 import Sidebar from "@/components/sidebar/Sidebar";
 import HeaderAdmin from "@/components/header/HeaderAdmin";
 import MobileSide from "@/components/sidebar/Mobile";
+import Auth from "./Auth";
 
 export const metadata: Metadata = {
   title: "Admin WWF",
@@ -44,7 +45,7 @@ export default function RootLayout({
                 </div>
               </div>
             </div>
-            {/* <Auth /> */}
+            <Auth />
           </WelcomeContextProvider>
         </MenuContextProvider>
       </body>

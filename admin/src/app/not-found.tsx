@@ -13,7 +13,7 @@ const NotFound = () => {
         <span>4</span>
       </section>
       <div className="link-container">
-        <a target="_blank" href="/" className="more-link">
+        <a href="/dashboard" className="more-link">
           Kembali Ke Halaman Utama
         </a>
       </div>
