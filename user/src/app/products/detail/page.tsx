@@ -27,6 +27,7 @@ const Detail = () => {
   const [activeColor, setActiveColor] = useState<string | null>(null);
   const [activeSize, setActiveSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [rateProduct, setRateProduct] = useState(0);
   //  params
   const searchParams = useSearchParams();
   const product_id = searchParams.get("product_id");
@@ -231,8 +232,8 @@ const Detail = () => {
               </div> */}
             </div>
             <div className="flex items-center mt-3">
-              <Rate currentRate={5} size={14} />
-              <span className="caption1 text-secondary">(1.234 reviews)</span>
+              <Rate currentRate={rateProduct} size={14} />
+              <span className="caption1 text-secondary">({rateProduct})</span>
             </div>
             <div className="flex items-center gap-3 flex-wrap mt-5 pb-6 border-b border-line">
               <div className="product-price heading5">
@@ -291,147 +292,59 @@ const Detail = () => {
 
       <div className="review-block md:py-20 py-10 bg-surface">
         <div className="container">
-          <div className="heading flex items-center justify-between flex-wrap gap-4">
-            <div className="heading4">Customer Review</div>
-          </div>
-          <div className="top-overview flex justify-between py-6 max-md:flex-col gap-y-6">
-            <div className="rating lg:w-1/4 md:w-[30%] lg:pr-[75px] md:pr-[35px]">
-              <div className="heading flex items-center justify-center flex-wrap gap-3 gap-y-4">
-                <div className="text-display">4.6</div>
-                <div className="flex flex-col items-center">
-                  <Rate currentRate={5} size={18} />
-                  <div className="text-secondary text-center mt-1">
-                    (1,968 Ratings)
-                  </div>
-                </div>
-              </div>
-              <div className="list-rating mt-3">
-                <div className="item flex items-center justify-between gap-1.5">
-                  <div className="flex items-center gap-1">
-                    <div className="caption1">5</div>
-                    <Icon.Star size={14} weight="fill" />
-                  </div>
-                  <div className="progress bg-line relative w-3/4 h-2">
-                    <div className="progress-percent absolute bg-yellow w-[50%] h-full left-0 top-0"></div>
-                  </div>
-                  <div className="caption1">50%</div>
-                </div>
-                <div className="item flex items-center justify-between gap-1.5 mt-1">
-                  <div className="flex items-center gap-1">
-                    <div className="caption1">4</div>
-                    <Icon.Star size={14} weight="fill" />
-                  </div>
-                  <div className="progress bg-line relative w-3/4 h-2">
-                    <div className="progress-percent absolute bg-yellow w-[20%] h-full left-0 top-0"></div>
-                  </div>
-                  <div className="caption1">20%</div>
-                </div>
-                <div className="item flex items-center justify-between gap-1.5 mt-1">
-                  <div className="flex items-center gap-1">
-                    <div className="caption1">3</div>
-                    <Icon.Star size={14} weight="fill" />
-                  </div>
-                  <div className="progress bg-line relative w-3/4 h-2">
-                    <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                  </div>
-                  <div className="caption1">10%</div>
-                </div>
-                <div className="item flex items-center justify-between gap-1.5 mt-1">
-                  <div className="flex items-center gap-1">
-                    <div className="caption1">2</div>
-                    <Icon.Star size={14} weight="fill" />
-                  </div>
-                  <div className="progress bg-line relative w-3/4 h-2">
-                    <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                  </div>
-                  <div className="caption1">10%</div>
-                </div>
-                <div className="item flex items-center justify-between gap-1.5 mt-1">
-                  <div className="flex items-center gap-2">
-                    <div className="caption1">1</div>
-                    <Icon.Star size={14} weight="fill" />
-                  </div>
-                  <div className="progress bg-line relative w-3/4 h-2">
-                    <div className="progress-percent absolute bg-yellow w-[10%] h-full left-0 top-0"></div>
-                  </div>
-                  <div className="caption1">10%</div>
-                </div>
-              </div>
-            </div>
-            <div className="list-img lg:w-3/4 md:w-[70%] lg:pl-[15px] md:pl-[15px]">
-              <div className="heading5">
-                Semua Gambar ({productImgs?.length})
-              </div>
-              <div className="list md:mt-6 mt-3">
-                <Swiper
-                  spaceBetween={16}
-                  slidesPerView={3}
-                  modules={[Navigation]}
-                  breakpoints={{
-                    576: {
-                      slidesPerView: 4,
-                      spaceBetween: 16,
-                    },
-                    640: {
-                      slidesPerView: 5,
-                      spaceBetween: 16,
-                    },
-                    768: {
-                      slidesPerView: 4,
-                      spaceBetween: 16,
-                    },
-                    992: {
-                      slidesPerView: 5,
-                      spaceBetween: 20,
-                    },
-                    1100: {
-                      slidesPerView: 5,
-                      spaceBetween: 20,
-                    },
-                    1290: {
-                      slidesPerView: 7,
-                      spaceBetween: 20,
-                    },
-                  }}
-                >
-                  {productImgs.map((item, index) => (
-                    <SwiperSlide key={index}>
-                      <Image
-                        src={`${BASE_URL}/${item}`}
-                        width={400}
-                        height={400}
-                        alt=""
-                        className="w-[120px] aspect-square object-cover rounded-lg"
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-              </div>
-              <div className="sorting flex items-center flex-wrap md:gap-5 gap-3 gap-y-3 mt-6">
-                <div className="text-button">Sort by</div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  Newest
-                </div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  5 Star
-                </div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  4 Star
-                </div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  3 Star
-                </div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  2 Star
-                </div>
-                <div className="item bg-white px-4 py-1 border border-line rounded-full">
-                  1 Star
-                </div>
-              </div>
+          <div className="list-img lg:w-3/4 md:w-[70%] lg:pl-[15px] md:pl-[15px] mb-6">
+            <div className="heading5">Semua Gambar ({productImgs?.length})</div>
+            <div className="list md:mt-6 mt-3">
+              <Swiper
+                spaceBetween={16}
+                slidesPerView={3}
+                modules={[Navigation]}
+                breakpoints={{
+                  576: {
+                    slidesPerView: 4,
+                    spaceBetween: 16,
+                  },
+                  640: {
+                    slidesPerView: 5,
+                    spaceBetween: 16,
+                  },
+                  768: {
+                    slidesPerView: 4,
+                    spaceBetween: 16,
+                  },
+                  992: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                  },
+                  1100: {
+                    slidesPerView: 5,
+                    spaceBetween: 20,
+                  },
+                  1290: {
+                    slidesPerView: 7,
+                    spaceBetween: 20,
+                  },
+                }}
+              >
+                {productImgs.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <Image
+                      src={`${BASE_URL}/${item}`}
+                      width={400}
+                      height={400}
+                      alt=""
+                      className="w-[120px] aspect-square object-cover rounded-lg"
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </div>
           </div>
           {/* list Review */}
-          <ListReview dtReviews={showProduct?.review as any} />
+          <ListReview
+            dtReviews={showProduct?.review as any}
+            setRateProduct={setRateProduct}
+          />
         </div>
       </div>
     </div>

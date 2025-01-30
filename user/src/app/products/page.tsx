@@ -45,8 +45,6 @@ export default function BreadCrumb1() {
     }
   }, [dtSubCategories, dtSubCategories.length]);
 
-  console.log({ activeTab });
-
   // get products
   useEffect(() => {
     if (activeTab) {

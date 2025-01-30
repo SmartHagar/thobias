@@ -7,10 +7,11 @@ import { motion } from "framer-motion";
 import useSubCategoriesApi from "@/store/api/SubCategories";
 import useProductsApi from "@/store/api/Products";
 import Product from "../Product/Product";
+import Loading from "../Other/Loading";
 
 const WhatNewOne = () => {
   const [activeTab, setActiveTab] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // store
   const { setSubCategoriesAll, dtSubCategories } = useSubCategoriesApi();
@@ -73,24 +74,29 @@ const WhatNewOne = () => {
                 })}
             </div>
           </div>
-          {isLoading && <div className="text-center mt-10">Loading...</div>}
           {dtProducts?.data && dtProducts.data.length === 0 && (
             <div className="text-center mt-10">Tidak ada produk</div>
           )}
-          <div className="grid lg:grid-cols-4 grid-cols-2 sm:gap-[30px] gap-[20px] md:mt-10 mt-6">
-            {dtProducts?.data &&
-              dtProducts.data.length > 0 &&
-              dtProducts.data.map((item) => {
-                return (
-                  <Product
-                    data={item}
-                    type="grid"
-                    key={item.id}
-                    style="style-1"
-                  />
-                );
-              })}
-          </div>
+          {isLoading ? (
+            <div className="flex justify-center items-center">
+              <Loading />
+            </div>
+          ) : (
+            <div className="grid lg:grid-cols-4 grid-cols-2 sm:gap-[30px] gap-[20px] md:mt-10 mt-6">
+              {dtProducts?.data &&
+                dtProducts.data.length > 0 &&
+                dtProducts.data.map((item) => {
+                  return (
+                    <Product
+                      data={item}
+                      type="grid"
+                      key={item.id}
+                      style="style-1"
+                    />
+                  );
+                })}
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -11,10 +11,11 @@ export default interface ReviewsTypes {
   product_variant_id: string;
   user_id: string;
   order_id: string;
-  rating: string;
+  rating: number;
   comment: string;
   product: ProductsTypes;
   product_variant: VariantsTypes;
   order: OrdersTypes;
   user: User;
+  created_at: string;
 }
