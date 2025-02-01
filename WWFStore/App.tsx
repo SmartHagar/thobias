@@ -13,20 +13,34 @@ import {
   requestUserPermission,
   setupForegroundHandler,
   setupBackgroundHandler,
+  checkNotificationPermission,
 } from './src/services/NotificationService';
 
 function App(): React.JSX.Element {
   useEffect(() => {
-    // Minta izin notifikasi saat aplikasi pertama kali dibuka
-    requestUserPermission();
-    // Setup listener untuk notifikasi
-    getFCMToken();
-    // Setup handlers
-    const unsubscribeForeground = setupForegroundHandler();
-    setupBackgroundHandler();
+    let unsubscribeForeground: () => void;
+
+    const checkPermission = async () => {
+      try {
+        const hasPermission = await checkNotificationPermission();
+        if (!hasPermission) {
+          await requestUserPermission();
+        }
+
+        await getFCMToken();
+        unsubscribeForeground = setupForegroundHandler();
+        setupBackgroundHandler();
+      } catch (error) {
+        console.error('Error setting up notifications:', error);
+      }
+    };
+
+    checkPermission();
 
     return () => {
-      unsubscribeForeground();
+      if (unsubscribeForeground) {
+        unsubscribeForeground();
+      }
     };
   }, []);
 
