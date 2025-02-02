@@ -1,19 +1,28 @@
 /** @format */
 "use client";
+import useNotificationsApi from "@/stores/api/Notifications";
+import NotificationType from "@/types/NotificationType";
 import { pusher } from "@/utils/pusher";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 
 const NotificationContext = createContext<{
-  notifications: any[];
-  markAsRead?: (id: number) => void;
+  dtNotifications: NotificationType[];
 }>({
-  notifications: [],
-  markAsRead: () => {},
+  dtNotifications: [],
 });
 
-const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
-  const [notifications, setNotifications] = useState<any>([]);
+const NotificationContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  // store
+  const { dtNotifications, setNotificationsAll } = useNotificationsApi();
   useEffect(() => {
+    setNotificationsAll({
+      type: "new_order",
+      notifiable: { status: "dibayar" },
+    });
     console.log("Initializing Pusher connection..."); // Log inisialisasi
 
     // Log status koneksi Pusher
@@ -39,20 +48,15 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     // Notifikasi pesanan baru
-    orderChannel.bind("new-order", (data: any) => {
-      console.log("📦 Received new order event:", data);
-      const newNotification = {
-        id: data.id,
-      };
-      setNotifications((prev: any) => {
-        console.log("Previous notifications:", prev);
-        const updated = [newNotification, ...prev];
-        console.log("Updated notifications:", updated);
-        return updated;
+    orderChannel.bind("new_order", (data: any) => {
+      console.log("New order:", data);
+      setNotificationsAll({
+        type: "new_order",
+        notifiable: { status: "dibayar" },
       });
     });
 
-    console.log("Current notifications:", notifications);
+    console.log("Current notifications:", dtNotifications);
 
     return () => {
       console.log("Cleaning up Pusher subscription...");
@@ -60,14 +64,13 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  console.log({ notifications });
   return (
-    <NotificationContext.Provider value={{ notifications }}>
+    <NotificationContext.Provider value={{ dtNotifications }}>
       {children}
     </NotificationContext.Provider>
   );
 };
 
-export default NotificationProvider;
+export default NotificationContextProvider;
 
-export const useNotifications = () => useContext(NotificationContext);
+export const useNotificationsContext = () => useContext(NotificationContext);

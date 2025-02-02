@@ -8,7 +8,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import HeaderAdmin from "@/components/header/HeaderAdmin";
 import MobileSide from "@/components/sidebar/Mobile";
 import Auth from "./Auth";
-import NotificationProvider from "@/context/NotificationNewOrders";
+import NotificationContextProvider from "@/context/NotificationContext";
 
 export const metadata: Metadata = {
   title: "Admin WWF",
@@ -26,7 +26,7 @@ export default function RootLayout({
       <body>
         <MenuContextProvider>
           <WelcomeContextProvider>
-            <NotificationProvider>
+            <NotificationContextProvider>
               <div className="min-h-screen w-full font-Cocomat-Pro text-black overflow-hidden bg-white dark:bg-gray-900">
                 {/* sidebar */}
                 <div className="fixed left-0 top-0 bottom-0 lg:w-52 bg-fourth/80 z-50 hidden lg:block">
@@ -48,7 +48,7 @@ export default function RootLayout({
                 </div>
               </div>
               <Auth />
-            </NotificationProvider>
+            </NotificationContextProvider>
           </WelcomeContextProvider>
         </MenuContextProvider>
       </body>
