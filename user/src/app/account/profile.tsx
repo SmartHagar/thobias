@@ -1,5 +1,5 @@
 /** @format */
-
+"use client";
 import React, { useEffect, useState } from "react";
 import * as Icon from "@phosphor-icons/react/dist/ssr";
 // import Image from "next/image";

@@ -18,6 +18,7 @@ import {
 
 function App(): React.JSX.Element {
   const [fcmToken, setFcmToken] = useState<string | null>(null);
+
   useEffect(() => {
     let unsubscribeForeground: () => void;
 
@@ -48,13 +49,15 @@ function App(): React.JSX.Element {
     };
   }, []);
 
+  console.log({fcmToken});
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <WebViewComponent fcmToken={fcmToken} />
+      <WebViewComponent />
     </SafeAreaView>
   );
 }

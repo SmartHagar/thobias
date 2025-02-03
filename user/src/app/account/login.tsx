@@ -1,7 +1,6 @@
 /** @format */
 "use client";
 // import Link from "next/link";
-import React, { useEffect, useState } from "react";
 // import * as Icon from "@phosphor-icons/react/dist/ssr";
 import Register from "./register";
 import useLogin from "@/store/auth/login";
@@ -9,7 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Cookies from "js-cookie";
-import useDeviceTokens from "@/store/crud/DeviceToken";
+import { useState } from "react";
 
 interface LoginTypes {
   email: string;
@@ -24,10 +23,8 @@ const registerSchema = yup.object().shape({
 const Login = () => {
   // state
   const [isRegister, setIsRegister] = useState(false);
-  const [fcmToken, setFcmToken] = useState<string | null>(null);
   // store
   const { setLogin, cekToken } = useLogin();
-  const { addData } = useDeviceTokens();
 
   const {
     register,
@@ -37,41 +34,30 @@ const Login = () => {
     resolver: yupResolver(registerSchema),
     mode: "onChange",
   });
-  // ambil fcm token dari webview
-  useEffect(() => {
-    const handleMessage = (event: any) => {
-      try {
-        const data = JSON.parse(event.data);
-        if (data.type === "FCM_TOKEN") {
-          // Simpan token FCM di cookies
-          Cookies.set("FCM_TOKEN", data.token);
-          setFcmToken(data.token);
-        }
-      } catch (error) {
-        console.error("Error parsing message:", error);
+
+  const sendUser = (userData: any) => {
+    // Memastikan kode hanya dijalankan di browser
+    if (typeof window !== "undefined") {
+      // Mengirim data ke React Native WebView
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (window.ReactNativeWebView) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        window.ReactNativeWebView.postMessage(JSON.stringify(userData));
       }
-    };
-
-    // Tambahkan event listener
-    window.addEventListener("message", handleMessage);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+    }
+  };
 
   const onSubmit: SubmitHandler<LoginTypes> = async (row) => {
     const res = await setLogin(row);
     if (res.status === "success") {
       const { token, role, user } = res.data;
+      const userStr = JSON.stringify(user);
       Cookies.set("token", token);
       Cookies.set("role", role);
-      Cookies.set("user", JSON.stringify(user));
-      await addData({
-        user_id: user.id,
-        fcm_token: fcmToken,
-      });
+      Cookies.set("user", userStr);
+      sendUser(userStr);
       cekToken();
     }
   };

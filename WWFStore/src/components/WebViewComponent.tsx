@@ -14,25 +14,21 @@ type WebViewRef = WebView & {
   goForward: () => void;
 };
 
-interface Props {
-  fcmToken: string | null;
-}
-
-const WebViewComponent = ({fcmToken}: Props) => {
+const WebViewComponent = () => {
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webViewRef = useRef<WebViewRef>(null);
   const [lastBackPressed, setLastBackPressed] = useState<number>(0);
 
-  useEffect(() => {
-    if (webViewRef.current) {
-      webViewRef.current.postMessage(
-        JSON.stringify({
-          type: 'FCM_TOKEN',
-          token: fcmToken,
-        }),
-      );
+  const [userData, setUserData] = useState<any>(null);
+
+  const onWebViewMessage = (event: any) => {
+    try {
+      const data = JSON.parse(event.nativeEvent.data);
+      setUserData(data);
+    } catch (error) {
+      console.error('Error parsing WebView message:', error);
     }
-  }, [fcmToken]);
+  };
 
   const showExitToast = () => {
     if (Platform.OS === 'android') {
@@ -74,12 +70,13 @@ const WebViewComponent = ({fcmToken}: Props) => {
     setCanGoBack(navState.canGoBack);
   };
 
+  console.log({userData});
+
   return (
     <View style={styles.container}>
       <WebView
         ref={webViewRef as any}
-        // source={{uri: 'https://wwf.sitoko.my.id'}}
-        source={{uri: 'http://localhost:3099'}}
+        source={{uri: 'https://wwf.sitoko.my.id'}}
         style={styles.webview}
         onNavigationStateChange={onNavigationStateChange}
         onError={syntheticEvent => {
@@ -88,6 +85,7 @@ const WebViewComponent = ({fcmToken}: Props) => {
         }}
         javaScriptEnabled={true}
         domStorageEnabled={true}
+        onMessage={onWebViewMessage}
       />
     </View>
   );
