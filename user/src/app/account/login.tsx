@@ -23,6 +23,7 @@ const registerSchema = yup.object().shape({
 const Login = () => {
   // state
   const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState("");
   // store
   const { setLogin, cekToken } = useLogin();
 
@@ -51,6 +52,7 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<LoginTypes> = async (row) => {
     const res = await setLogin(row);
+    setError("");
     if (res.status === "success") {
       const { token, role, user } = res.data;
       const userStr = JSON.stringify(user);
@@ -60,7 +62,12 @@ const Login = () => {
       sendUser(userStr);
       cekToken();
     }
+    if (res.status === "error") {
+      setError(res.error.message);
+    }
   };
+
+  console.log({ error });
 
   return !isRegister ? (
     <div className="login-block md:py-20 py-10">
@@ -68,6 +75,7 @@ const Login = () => {
         <div className="content-main flex gap-y-8 max-md:flex-col">
           <div className="left md:w-1/2 w-full lg:pr-[60px] md:pr-[40px] md:border-r border-line">
             <div className="heading4">Login</div>
+            <p className="text-red">{error}</p>
             <form className="md:mt-7 mt-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="email ">
                 <input

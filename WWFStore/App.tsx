@@ -8,6 +8,7 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import WebViewComponent from './src/components/WebViewComponent';
+import axios from 'axios';
 import {
   getFCMToken,
   requestUserPermission,
@@ -18,6 +19,7 @@ import {
 
 function App(): React.JSX.Element {
   const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
     let unsubscribeForeground: () => void;
@@ -51,13 +53,27 @@ function App(): React.JSX.Element {
 
   console.log({fcmToken});
 
+  useEffect(() => {
+    if (userData) {
+      //  parse user data
+      const parsedUserData = JSON.parse(userData);
+      const row = {
+        user_id: parsedUserData.id,
+        fcm_token: fcmToken,
+      };
+      //  send with axios request to https://back-wwf.sitoko.my.id/crud/deviceTokens
+      axios.post('https://back-wwf.sitoko.my.id/crud/deviceTokens', row);
+      console.log('sendata');
+    }
+  }, [fcmToken, userData]);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <WebViewComponent />
+      <WebViewComponent setUserData={setUserData} />
     </SafeAreaView>
   );
 }

@@ -14,12 +14,14 @@ type WebViewRef = WebView & {
   goForward: () => void;
 };
 
-const WebViewComponent = () => {
+interface Props {
+  setUserData: (data: any) => void;
+}
+
+const WebViewComponent = ({setUserData}: Props) => {
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webViewRef = useRef<WebViewRef>(null);
   const [lastBackPressed, setLastBackPressed] = useState<number>(0);
-
-  const [userData, setUserData] = useState<any>(null);
 
   const onWebViewMessage = (event: any) => {
     try {
@@ -69,8 +71,6 @@ const WebViewComponent = () => {
   const onNavigationStateChange = (navState: WebViewNavigation) => {
     setCanGoBack(navState.canGoBack);
   };
-
-  console.log({userData});
 
   return (
     <View style={styles.container}>
