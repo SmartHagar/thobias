@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import WebViewComponent from './src/components/WebViewComponent';
 import {
@@ -17,6 +17,7 @@ import {
 } from './src/services/NotificationService';
 
 function App(): React.JSX.Element {
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
   useEffect(() => {
     let unsubscribeForeground: () => void;
 
@@ -27,7 +28,10 @@ function App(): React.JSX.Element {
           await requestUserPermission();
         }
 
-        await getFCMToken();
+        const token = await getFCMToken();
+        if (token) {
+          setFcmToken(token);
+        }
         unsubscribeForeground = setupForegroundHandler();
         setupBackgroundHandler();
       } catch (error) {
@@ -50,7 +54,7 @@ function App(): React.JSX.Element {
         barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <WebViewComponent />
+      <WebViewComponent fcmToken={fcmToken} />
     </SafeAreaView>
   );
 }

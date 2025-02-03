@@ -14,10 +14,25 @@ type WebViewRef = WebView & {
   goForward: () => void;
 };
 
-const WebViewComponent = () => {
+interface Props {
+  fcmToken: string | null;
+}
+
+const WebViewComponent = ({fcmToken}: Props) => {
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
   const webViewRef = useRef<WebViewRef>(null);
   const [lastBackPressed, setLastBackPressed] = useState<number>(0);
+
+  useEffect(() => {
+    if (webViewRef.current) {
+      webViewRef.current.postMessage(
+        JSON.stringify({
+          type: 'FCM_TOKEN',
+          token: fcmToken,
+        }),
+      );
+    }
+  }, [fcmToken]);
 
   const showExitToast = () => {
     if (Platform.OS === 'android') {
@@ -63,7 +78,8 @@ const WebViewComponent = () => {
     <View style={styles.container}>
       <WebView
         ref={webViewRef as any}
-        source={{uri: 'https://wwf.sitoko.my.id'}}
+        // source={{uri: 'https://wwf.sitoko.my.id'}}
+        source={{uri: 'http://localhost:3099'}}
         style={styles.webview}
         onNavigationStateChange={onNavigationStateChange}
         onError={syntheticEvent => {

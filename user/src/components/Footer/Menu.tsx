@@ -10,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 const Menu = () => {
   const router = useRouter();
   const pathName = usePathname();
+
   return (
     <section className="bg-linear lg:hidden fixed bottom-0 left-0 right-0 h-16 z-50 grid grid-cols-4 gap-4">
       {/* home */}
