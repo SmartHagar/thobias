@@ -215,11 +215,15 @@ const Orders = ({ dtUser, activeTab }: Props) => {
               </div>
             )}
             <div className="flex flex-wrap gap-4 p-5">
-              {order.status === "belum bayar" && (
-                <button className="button-main" onClick={() => openSnap(order)}>
-                  Bayar sekarang
-                </button>
-              )}
+              {order.status === "belum bayar" ||
+                (order.status === "tunggu" && (
+                  <button
+                    className="button-main"
+                    onClick={() => openSnap(order)}
+                  >
+                    Bayar sekarang
+                  </button>
+                ))}
               {order?.shipping_status?.status === "selesai" && (
                 <button
                   className="button-main"
