@@ -61,8 +61,8 @@ function App(): React.JSX.Element {
         user_id: parsedUserData.id,
         fcm_token: fcmToken,
       };
-      //  send with axios request to https://back-wwf.sitoko.my.id/crud/deviceTokens
-      axios.post('https://back-wwf.sitoko.my.id/crud/deviceTokens', row);
+      //  send with axios request to https://thobias.ta-uogp.my.id/crud/deviceTokens
+      axios.post('https://thobias.ta-uogp.my.id/crud/deviceTokens', row);
       console.log('sendata');
     }
   }, [fcmToken, userData]);

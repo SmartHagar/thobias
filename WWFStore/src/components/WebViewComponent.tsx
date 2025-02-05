@@ -1,9 +1,10 @@
 import {
   BackHandler,
   Platform,
+  RefreshControl,
+  ScrollView,
   StyleSheet,
   ToastAndroid,
-  View,
 } from 'react-native';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import WebView, {WebViewNavigation} from 'react-native-webview';
@@ -20,8 +21,10 @@ interface Props {
 
 const WebViewComponent = ({setUserData}: Props) => {
   const [canGoBack, setCanGoBack] = useState<boolean>(false);
+  const [refreshing, setRefreshing] = useState(false);
   const webViewRef = useRef<WebViewRef>(null);
   const [lastBackPressed, setLastBackPressed] = useState<number>(0);
+  const [isRefresh, setIsRefresh] = useState<boolean>(true);
 
   const onWebViewMessage = (event: any) => {
     try {
@@ -72,12 +75,35 @@ const WebViewComponent = ({setUserData}: Props) => {
     setCanGoBack(navState.canGoBack);
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    // webViewRef.current?.reload();
+    setRefreshing(false);
+  };
+
+  const onScrollWebView = (event: any) => {
+    const {contentOffset} = event.nativeEvent;
+    if (contentOffset.y === 0) {
+      setIsRefresh(true);
+    } else {
+      setIsRefresh(false);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          enabled={isRefresh}
+        />
+      }>
       <WebView
         ref={webViewRef as any}
         source={{uri: 'https://wwf.sitoko.my.id'}}
-        style={styles.webview}
+        style={styles.container}
         onNavigationStateChange={onNavigationStateChange}
         onError={syntheticEvent => {
           const {nativeEvent} = syntheticEvent;
@@ -86,8 +112,11 @@ const WebViewComponent = ({setUserData}: Props) => {
         javaScriptEnabled={true}
         domStorageEnabled={true}
         onMessage={onWebViewMessage}
+        onScroll={event => {
+          onScrollWebView(event);
+        }}
       />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -96,14 +125,5 @@ export default WebViewComponent;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  webview: {
-    flex: 1,
-  },
-  loader: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: [{translateX: -25}, {translateY: -25}],
   },
 });
